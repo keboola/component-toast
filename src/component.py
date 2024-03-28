@@ -4,7 +4,7 @@ Template Component main class.
 """
 import csv
 import logging
-from datetime import datetime
+# from datetime import datetime
 
 from keboola.component.base import ComponentBase
 from keboola.component.exceptions import UserException
@@ -12,15 +12,6 @@ from keboola.utils import parse_datetime_interval
 
 from configuration import Configuration
 from client import ToastClient
-
-# configuration variables
-KEY_API_TOKEN = '#api_token'
-KEY_PRINT_HELLO = 'print_hello'
-
-# list of mandatory parameters => if some is missing,
-# component will fail with readable message on initialization.
-REQUIRED_PARAMETERS = [KEY_PRINT_HELLO]
-REQUIRED_IMAGE_PARS = []
 
 
 class Component(ComponentBase):
@@ -56,9 +47,16 @@ class Component(ComponentBase):
         start_date, end_date = parse_datetime_interval(self.cfg.report_settings.date_from,
                                                        self.cfg.report_settings.date_to)
 
-        self.client.list_orders(self.cfg.report_settings.restaurant_id, start_date, end_date)
+        orders = self.client.list_orders(self.cfg.report_settings.restaurant_id, start_date, end_date)
 
-        logging.info("Hello!")
+        out_table = self.create_out_table_definition("orders.csv")
+
+        with open(out_table.full_path, 'w') as out_file:
+            writer = csv.DictWriter(out_file, fieldnames=orders[0].keys())
+            for order in orders:
+                writer.writerow(order)
+
+        self.write_manifest(out_table)
 
 
 """
