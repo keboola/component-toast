@@ -1,1 +1,78 @@
-{}
+{
+  "type": "object",
+  "title": "Configuration Parameters",
+  "required": [
+  ],
+  "properties": {
+    "report_settings": {
+      "title": "Report Settings",
+      "type": "object",
+      "propertyOrder": 1,
+      "required": [
+        "restaurant_id",
+        "date_from",
+        "date_to"
+      ],
+      "properties": {
+        "restaurant_id": {
+          "type": "string",
+          "title": "Restaurant ID",
+          "propertyOrder": 1
+        },
+        "date_from": {
+          "type": "string",
+          "title": "Date From",
+          "description": "Date from which data is downloaded. Either date in YYYY-MM-DD format or dateparser string i.e. 5 days ago, 1 month ago, yesterday, etc.",
+          "propertyOrder": 2
+        },
+        "date_to": {
+          "type": "string",
+          "title": "Date to",
+          "description": "Date to which data is downloaded. Either date in YYYY-MM-DD format or dateparser string i.e. 5 days ago, 1 month ago, now, etc.",
+          "propertyOrder": 3
+        }
+      }
+    },
+    "destination": {
+      "title": "Destination",
+      "type": "object",
+      "propertyOrder": 2,
+      "required": [
+        "output_table_name",
+        "load_type"
+      ],
+      "properties": {
+        "output_table_name": {
+          "type": "string",
+          "title": "Storage Table Name",
+          "description": "Name of the table stored in Storage.",
+          "propertyOrder": 10
+        },
+        "load_type": {
+          "type": "string",
+          "required": true,
+          "enum": [
+            "full_load",
+            "incremental_load"
+          ],
+          "options": {
+            "enum_titles": [
+              "Full Load",
+              "Incremental Load"
+            ]
+          },
+          "default": "full_load",
+          "title": "Load Type",
+          "description": "If Full load is used, the destination table will be overwritten every run. If incremental load is used, data will be upserted into the destination table. Tables with a primary key will have rows updated, tables without a primary key will have rows appended.",
+          "propertyOrder": 20
+        },
+        "primary_keys": {
+          "type": "string",
+          "title": "Primary Keys",
+          "description": "List of primary keys separated by commas e.g. id, other_id. If a primary key is set, updates can be done on the table by selecting incremental loads. The primary key can consist of multiple columns. The primary key of an existing table cannot be changed.",
+          "propertyOrder": 30
+        }
+      }
+    }
+  }
+}

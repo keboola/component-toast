@@ -1,19 +1,37 @@
 {
   "type": "object",
-  "title": "extractor configuration",
+  "title": "Component configuration",
   "required": [
-    "print_hello"
+    "credentials"
   ],
   "properties": {
-    "print_hello": {
-      "type": "boolean",
-      "title": "Print Hello",
+    "credentials": {
+      "type": "object",
+      "title": "Authorization",
+      "required": [
+        "url",
+        "client_id",
+        "#client_secret"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "title": "Url of your toast instance",
+          "propertyOrder": 1
+        },
+        "client_id": {
+          "type": "string",
+          "title": "Client ID",
+          "propertyOrder": 2
+        },
+        "#client_secret": {
+          "type": "string",
+          "format": "password",
+          "title": "Client Secret",
+          "propertyOrder": 3
+        }
+      },
       "propertyOrder": 1
-    },
-    "debug": {
-      "type": "boolean",
-      "title": "Debug",
-      "propertyOrder": 2
     }
   }
 }
