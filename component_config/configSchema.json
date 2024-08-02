@@ -16,7 +16,7 @@
       "properties": {
         "url": {
           "type": "string",
-          "title": "Url of your toast instance",
+          "title": "Url of your Toast instance",
           "propertyOrder": 1
         },
         "client_id": {
@@ -32,6 +32,115 @@
         }
       },
       "propertyOrder": 1
+    },
+    "restaurants": {
+      "type": "object",
+      "title": "Restaurants",
+      "properties": {
+        "restaurant_select_type": {
+          "enum": [
+            "all_avaliable",
+            "selected_ids"
+          ],
+          "type": "string",
+          "title": "Load Type",
+          "format": "checkbox",
+          "default": "incremental_load",
+          "options": {
+            "enum_titles": [
+              "All Avaliable Restaurants",
+              "Selected Restaurants"
+            ]
+          },
+          "description": "For download data from all available restaurants, partner-level credentials are required.",
+          "propertyOrder": 1
+        },
+        "restaurants_ids": {
+          "type": "string",
+          "title": "ids of restaurants separated by comma",
+          "propertyOrder": 2,
+          "options": {
+            "dependencies": {
+              "restaurant_select_type": "selected_ids"
+            }
+          }
+        }
+      },
+      "propertyOrder": 2
+    },
+    "endpoints": {
+      "type": "array",
+      "format": "select",
+      "title": "Endpoints",
+      "description": "Endpoints to download data from",
+      "uniqueItems": true,
+      "items": {
+        "options": {
+          "enum_titles": [
+            "Restaurant Configuration Information",
+            "Orders"
+          ]
+        },
+        "enum": [
+          "configuration_information",
+          "orders"
+        ],
+        "type": "string"
+      },
+      "default": [
+        "configuration_information",
+        "orders"
+      ],
+      "propertyOrder": 3
+    },
+    "sync_options": {
+      "type": "object",
+      "title": "Sync Options",
+      "properties": {
+        "start_date": {
+          "type": "string",
+          "title": "Date From",
+          "default": "last run",
+          "description": "Date from which data is downloaded. Either date in YYYY-MM-DD format or dateparser string i.e. 5 days ago, 1 month ago, yesterday, etc. You can also set this as last run, which will fetch data from the last run of the component.",
+          "propertyOrder": 1
+        },
+        "end_date": {
+          "type": "string",
+          "title": "Date to",
+          "default": "now",
+          "description": "Date to which data is downloaded. Either date in YYYY-MM-DD format or dateparser string i.e. 5 days ago, 1 month ago, now, etc.",
+          "propertyOrder": 2
+        }
+      },
+      "propertyOrder": 4
+    },
+    "destination": {
+      "type": "object",
+      "title": "Destination",
+      "required": [
+        "load_type"
+      ],
+      "properties": {
+        "load_type": {
+          "enum": [
+            "full_load",
+            "incremental_load"
+          ],
+          "type": "string",
+          "title": "Load Type",
+          "format": "checkbox",
+          "default": "incremental_load",
+          "options": {
+            "enum_titles": [
+              "Full Load",
+              "Incremental Load"
+            ]
+          },
+          "description": "If Full load is used, the destination table will be overwritten every run. If incremental load is used, data will be upserted into the destination table.",
+          "propertyOrder": 1
+        }
+      },
+      "propertyOrder": 5
     }
   }
 }

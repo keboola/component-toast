@@ -1,0 +1,187 @@
+{
+  "orders": {
+    "table_name": "orders",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "openedDate": "openedDate",
+      "modifiedDate": "modifiedDate",
+      "promisedDate": "promisedDate",
+      "diningOption": "diningOption",
+      "checks": "checks",
+      "table": "table",
+      "serviceArea": "serviceArea",
+      "restaurantService": "restaurantService",
+      "revenueCenter": "revenueCenter",
+      "source": "source",
+      "duration": "duration",
+      "deliveryInfo": "deliveryInfo",
+      "requiredPrepTime": "requiredPrepTime",
+      "estimatedFulfillmentDate": "estimatedFulfillmentDate",
+      "numberOfGuests": "numberOfGuests",
+      "voided": "voided",
+      "voidDate": "voidDate",
+      "voidBusinessDate": "voidBusinessDate",
+      "paidDate": "paidDate",
+      "closedDate": "closedDate",
+      "deletedDate": "deletedDate",
+      "deleted": "deleted",
+      "businessDate": "businessDate",
+      "server": "server",
+      "pricingFeatures": "pricingFeatures",
+      "approvalStatus": "approvalStatus",
+      "guestOrderStatus": "guestOrderStatus",
+      "createdDevice": "createdDevice",
+      "createdDate": "createdDate",
+      "initialDate": "initialDate",
+      "lastModifiedDevice": "lastModifiedDevice",
+      "curbsidePickupInfo": "curbsidePickupInfo",
+      "deliveryServiceInfo": "deliveryServiceInfo",
+      "marketplaceFacilitatorTaxInfo": "marketplaceFacilitatorTaxInfo",
+      "createdInTestMode": "createdInTestMode",
+      "appliedPackagingInfo": "appliedPackagingInfo",
+      "excessFoodInfo": "excessFoodInfo"
+    },
+    "force_types": [
+      "guid",
+      "entityType"
+    ],
+    "child_tables": {
+      "checks": {
+        "table_name": "checks",
+        "column_mappings": {
+          "orders_guid": "orders_guid",
+          "guid": "guid",
+          "entityType": "entityType",
+          "externalId": "externalId",
+          "createdDate": "createdDate",
+          "openedDate": "openedDate",
+          "closedDate": "closedDate",
+          "modifiedDate": "modifiedDate",
+          "deletedDate": "deletedDate",
+          "deleted": "deleted",
+          "selections": "selections",
+          "customer": "customer",
+          "appliedLoyaltyInfo": "appliedLoyaltyInfo",
+          "taxExempt": "taxExempt",
+          "displayNumber": "displayNumber",
+          "appliedServiceCharges": "appliedServiceCharges",
+          "amount": "amount",
+          "taxAmount": "taxAmount",
+          "totalAmount": "totalAmount",
+          "payments": "payments",
+          "tabName": "tabName",
+          "paymentStatus": "paymentStatus",
+          "appliedDiscounts": "appliedDiscounts",
+          "voided": "voided",
+          "voidDate": "voidDate",
+          "voidBusinessDate": "voidBusinessDate",
+          "paidDate": "paidDate",
+          "createdDevice": "createdDevice",
+          "lastModifiedDevice": "lastModifiedDevice",
+          "duration": "duration"
+        },
+        "primary_keys": [
+          "orders_guid"
+        ],
+        "force_types": [
+        ],
+        "child_tables": {}
+      }
+    }
+  },
+  "configuration": {
+    "table_name": "configuration",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "general.name": "general_name",
+      "general.locationName": "general_locationName",
+      "general.locationCode": "general_locationCode",
+      "general.description": "general_description",
+      "general.timeZone": "general_timeZone",
+      "general.closeoutHour": "general_closeoutHour",
+      "general.managementGroupGuid": "general_managementGroupGuid",
+      "general.currencyCode": "general_currencyCode",
+      "general.firstBusinessDate": "general_firstBusinessDate",
+      "general.archived": "general_archived",
+      "urls.website": "urls_website",
+      "urls.facebook": "urls_facebook",
+      "urls.twitter": "urls_twitter",
+      "urls.orderOnline": "urls_orderOnline",
+      "urls.purchaseGiftCard": "urls_purchaseGiftCard",
+      "urls.checkGiftCard": "urls_checkGiftCard",
+      "location.address1": "location_address1",
+      "location.address2": "location_address2",
+      "location.city": "location_city",
+      "location.stateCode": "location_stateCode",
+      "location.administrativeArea": "location_administrativeArea",
+      "location.zipCode": "location_zipCode",
+      "location.country": "location_country",
+      "location.phone": "location_phone",
+      "location.phoneCountryCode": "location_phoneCountryCode",
+      "location.latitude": "location_latitude",
+      "location.longitude": "location_longitude",
+      "schedules.weekSchedule.monday": "schedules_weekSchedule_monday",
+      "schedules.weekSchedule.tuesday": "schedules_weekSchedule_tuesday",
+      "schedules.weekSchedule.wednesday": "schedules_weekSchedule_wednesday",
+      "schedules.weekSchedule.thursday": "schedules_weekSchedule_thursday",
+      "schedules.weekSchedule.friday": "schedules_weekSchedule_friday",
+      "schedules.weekSchedule.saturday": "schedules_weekSchedule_saturday",
+      "schedules.weekSchedule.sunday": "schedules_weekSchedule_sunday",
+      "delivery.enabled": "delivery_enabled",
+      "delivery.minimum": "delivery_minimum",
+      "delivery.area": "delivery_area",
+      "onlineOrdering.enabled": "onlineOrdering_enabled",
+      "onlineOrdering.scheduling": "onlineOrdering_scheduling",
+      "onlineOrdering.specialRequests": "onlineOrdering_specialRequests",
+      "onlineOrdering.specialRequestsMessage": "onlineOrdering_specialRequestsMessage",
+      "onlineOrdering.paymentOptions.delivery.cash": "onlineOrdering_paymentOptions_delivery_cash",
+      "onlineOrdering.paymentOptions.delivery.ccSameDay": "onlineOrdering_paymentOptions_delivery_ccSameDay",
+      "onlineOrdering.paymentOptions.delivery.ccFuture": "onlineOrdering_paymentOptions_delivery_ccFuture",
+      "onlineOrdering.paymentOptions.takeout.cash": "onlineOrdering_paymentOptions_takeout_cash",
+      "onlineOrdering.paymentOptions.takeout.ccSameDay": "onlineOrdering_paymentOptions_takeout_ccSameDay",
+      "onlineOrdering.paymentOptions.takeout.ccFuture": "onlineOrdering_paymentOptions_takeout_ccFuture",
+      "onlineOrdering.paymentOptions.takeout.ccInStore": "onlineOrdering_paymentOptions_takeout_ccInStore",
+      "onlineOrdering.paymentOptions.ccTip": "onlineOrdering_paymentOptions_ccTip",
+      "prepTimes.deliveryPrepTime": "prepTimes_deliveryPrepTime",
+      "prepTimes.deliveryTimeAfterOpen": "prepTimes_deliveryTimeAfterOpen",
+      "prepTimes.deliveryTimeBeforeClose": "prepTimes_deliveryTimeBeforeClose",
+      "prepTimes.takeoutPrepTime": "prepTimes_takeoutPrepTime",
+      "prepTimes.takeoutTimeAfterOpen": "prepTimes_takeoutTimeAfterOpen",
+      "prepTimes.takeoutTimeBeforeClose": "prepTimes_takeoutTimeBeforeClose",
+      "prepTimes.takeoutThrottlingTime": "prepTimes_takeoutThrottlingTime",
+      "prepTimes.deliveryThrottlingTime": "prepTimes_deliveryThrottlingTime"
+    },
+    "force_types": [
+    ],
+    "child_tables": {
+      "schedules": {
+        "table_name": "schedules",
+        "column_mappings": {
+          "schedules.daySchedules": "day_schedules",
+          "configuration_guid": "configuration_guid",
+          "weekSchedule.monday": "weekSchedule_monday",
+          "weekSchedule.tuesday": "weekSchedule_tuesday",
+          "weekSchedule.wednesday": "weekSchedule_wednesday",
+          "weekSchedule.thursday": "weekSchedule_thursday",
+          "weekSchedule.friday": "weekSchedule_friday",
+          "weekSchedule.saturday": "weekSchedule_saturday",
+          "weekSchedule.sunday": "weekSchedule_sunday"
+        },
+        "primary_keys": [
+        ],
+        "force_types": [
+        ],
+        "child_tables": {}
+      }
+    }
+  }
+
+}

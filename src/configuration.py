@@ -1,7 +1,8 @@
 import dataclasses
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
+from enum import Enum
 import dataconf
 
 
@@ -53,20 +54,34 @@ class Credentials(ConfigurationBase):
 
 
 @dataclass
-class ReportSettings(ConfigurationBase):
-    restaurant_id: str = ""
-    date_from: str = ""
-    date_to: str = ""
+class RestaurantsOptions(ConfigurationBase):
+    restaurant_select_type: str = ""
+    restaurants_ids: str = ""
+
+
+@dataclass
+class SyncOptions(ConfigurationBase):
+    start_date: str = ""
+    end_date: str = ""
+
+
+class LoadType(str, Enum):
+    full_load = "full_load"
+    incremental_load = "incremental_load"
+
+    def is_incremental(self) -> bool:
+        return self.value == self.incremental_load
 
 
 @dataclass
 class Destination(ConfigurationBase):
-    output_table_name: str = ""
-    load_type: str = ""
+    load_type: LoadType = "incremental_load"
 
 
 @dataclass
 class Configuration(ConfigurationBase):
     credentials: Credentials
-    report_settings: ReportSettings
+    restaurants: RestaurantsOptions
+    sync_options: SyncOptions
     destination: Destination
+    endpoints: List[str] = field(default_factory=list)
