@@ -1,1 +1,1 @@
-Toast long description
+Toast is a POS for restaurants

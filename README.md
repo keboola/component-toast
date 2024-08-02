@@ -1,46 +1,31 @@
 Toast
 =============
 
-Description
-
-**Table of contents:**
-
-[TOC]
-
-Functionality notes
-===================
-
-Prerequisites
-=============
-
-Get the API token, register application, etc.
-
-Features
-========
-
-| **Feature**             | **Note**                                      |
-|-------------------------|-----------------------------------------------|
-| Generic UI form         | Dynamic UI form                               |
-| Row Based configuration | Allows structuring the configuration in rows. |
-| oAuth                   | oAuth authentication enabled                  |
-| Incremental loading     | Allows fetching data in new increments.       |
-| Backfill mode           | Support for seamless backfill setup.          |
-| Date range filter       | Specify date range.                           |
+This component extract data from the Toast API.
 
 Supported endpoints
 ===================
-
-If you need more endpoints, please submit your request to
-[ideas.keboola.com](https://ideas.keboola.com/)
+following endpoints are supported:
+- restaurant configuration
+- orders
 
 Configuration
 =============
 
-Param 1
--------
+#### Authorization
+Provide the URL, Client ID, and Client Secret to connect to your account.
 
-Param 2
--------
+#### Restaurants
+You can choose to load all restaurants or just a specific one.
+
+#### Endpoints
+You can select which endpoints you want to download.
+
+#### Sync Options
+Specify the date range for the orders you want to download.
+
+#### Destination
+Load Type: You can choose whether the output tables in the bucket should be incrementally loaded or if the entire table should be replaced.
 
 Output
 ======

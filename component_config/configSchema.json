@@ -43,7 +43,7 @@
             "selected_ids"
           ],
           "type": "string",
-          "title": "Load Type",
+          "title": "Restaurants Selection",
           "format": "checkbox",
           "default": "incremental_load",
           "options": {
