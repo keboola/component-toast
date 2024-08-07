@@ -113,10 +113,11 @@ class Component(ComponentBase):
         if not self._writer_cache.get(table_name):
             incremental_load = self.cfg.destination.load_type.is_incremental()
             # TODO: use table_mapping.table_name for name once fixed in Parser
+            columns = list(table_mapping.column_mappings.values())
             table_def = self.create_out_table_definition(f'{table_name}.csv',
                                                          primary_key=table_mapping.primary_keys,
-                                                         incremental=incremental_load)
-            columns = list(table_mapping.column_mappings.values())
+                                                         incremental=incremental_load,
+                                                         schema=columns)
 
             out = open(table_def.full_path, 'w', newline='')
             writer = csv.DictWriter(out, columns)
