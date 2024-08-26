@@ -6,7 +6,7 @@ from ratelimit import limits, sleep_and_retry
 import logging
 import datetime
 
-ORDERS_PAGE_SIZE = 10
+ORDERS_PAGE_SIZE = 100
 ORDERS_BATCH_SIZE = 1000
 
 
@@ -47,6 +47,8 @@ class ToastClient(HttpClient):
 
         try:
             response = self.request("GET", "partners/v1/restaurants")
+            response.raise_for_status()
+
         except HTTPError as e:
             raise UserException(f"Error while listing restaurants: {e.response.json()['message']}")
 
@@ -60,6 +62,8 @@ class ToastClient(HttpClient):
 
         try:
             response = self.request("GET", endpoint_path=f"/restaurants/v1/groups/{restaurant_group_id}/restaurants")
+            response.raise_for_status()
+
         except HTTPError as e:
             raise UserException(f"Error while listing orders: {e.response.json()['message']}")
 
@@ -70,10 +74,12 @@ class ToastClient(HttpClient):
 
         try:
             response = self.request("GET", endpoint_path=f"restaurants/v1/restaurants/{restaurant_id}")
+            response.raise_for_status()
+
         except HTTPError as e:
             raise UserException(f"Error while listing restaurant details: {e.response.json()['message']}")
 
-        return response
+        return response.json()
 
     def list_orders(self, restaurant_id: str, date_from: datetime, date_to: datetime) -> list:
         """
@@ -92,15 +98,16 @@ class ToastClient(HttpClient):
 
             try:
 
-                response = self.request("GET", endpoint_path='orders/v2/ordersBulk', params=query).json()
+                response = self.request("GET", endpoint_path='orders/v2/ordersBulk', params=query)
+                response.raise_for_status()
 
             except HTTPError as e:
                 raise UserException(f"Error while listing orders: {e.response.json()['message']}")
 
-            if not response:
+            if not response.json():
                 break
 
-            batch.extend(response)
+            batch.extend(response.json())
 
             if page % (ORDERS_BATCH_SIZE/ORDERS_PAGE_SIZE) == 0:
                 yield batch
