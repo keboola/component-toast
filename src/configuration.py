@@ -49,8 +49,6 @@ class ConfigurationBase:
 @dataclass
 class Credentials(ConfigurationBase):
     url: str = ""
-    client_id: str = ""
-    pswd_client_secret: str = ""
 
 
 @dataclass

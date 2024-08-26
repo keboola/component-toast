@@ -39,7 +39,7 @@ class ToastClient(HttpClient):
         try:
             response = self.get(endpoint_path='partners/v1/restaurants')
         except HTTPError as e:
-            raise UserException(f"Error while listing orders: {e.response.json()['message']}")
+            raise UserException(f"Error while listing restaurants: {e.response.json()['message']}")
 
         return response
 
@@ -62,7 +62,7 @@ class ToastClient(HttpClient):
         try:
             response = self.get(endpoint_path=f"restaurants/v1/restaurants/{restaurant_id}")
         except HTTPError as e:
-            raise UserException(f"Error while listing orders: {e.response.json()['message']}")
+            raise UserException(f"Error while listing restaurant details: {e.response.json()['message']}")
 
         return response
 

@@ -53,7 +53,8 @@ class Component(ComponentBase):
         self.cfg: Configuration = Configuration.load_from_dict(self.configuration.parameters)
 
     def _init_client(self) -> None:
-        self.client = ToastClient(self.cfg.credentials.client_id, self.cfg.credentials.pswd_client_secret,
+        self.client = ToastClient(self.configuration.image_parameters.get("client_id"),
+                                  self.configuration.image_parameters.get("#client_secret"),
                                   self.cfg.credentials.url)
 
     def run(self):

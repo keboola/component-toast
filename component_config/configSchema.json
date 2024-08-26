@@ -9,26 +9,13 @@
       "type": "object",
       "title": "Authorization",
       "required": [
-        "url",
-        "client_id",
-        "#client_secret"
+        "url"
       ],
       "properties": {
         "url": {
           "type": "string",
           "title": "Url of your Toast instance",
           "propertyOrder": 1
-        },
-        "client_id": {
-          "type": "string",
-          "title": "Client ID",
-          "propertyOrder": 2
-        },
-        "#client_secret": {
-          "type": "string",
-          "format": "password",
-          "title": "Client Secret",
-          "propertyOrder": 3
         }
       },
       "propertyOrder": 1
