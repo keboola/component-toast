@@ -24,33 +24,10 @@
       "type": "object",
       "title": "Restaurants",
       "properties": {
-        "restaurant_select_type": {
-          "enum": [
-            "all_avaliable",
-            "selected_ids"
-          ],
-          "type": "string",
-          "title": "Restaurants Selection",
-          "format": "checkbox",
-          "default": "incremental_load",
-          "options": {
-            "enum_titles": [
-              "All Avaliable Restaurants",
-              "Selected Restaurants"
-            ]
-          },
-          "description": "For download data from all available restaurants, partner-level credentials are required.",
-          "propertyOrder": 1
-        },
         "restaurants_ids": {
           "type": "string",
           "title": "ids of restaurants separated by comma",
-          "propertyOrder": 2,
-          "options": {
-            "dependencies": {
-              "restaurant_select_type": "selected_ids"
-            }
-          }
+          "propertyOrder": 1
         }
       },
       "propertyOrder": 2

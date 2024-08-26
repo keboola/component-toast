@@ -13,10 +13,10 @@ Configuration
 =============
 
 #### Authorization
-Provide the URL, Client ID, and Client Secret to connect to your account.
+Provide the URL of your toast instance
 
 #### Restaurants
-You can choose to load all restaurants or just a specific one.
+Select the IDs of the restaurants, separated by commas, to download data from.
 
 #### Endpoints
 You can select which endpoints you want to download.

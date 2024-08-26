@@ -62,11 +62,10 @@ class Component(ComponentBase):
         Main execution code
         """
 
-        if self.cfg.restaurants.restaurant_select_type == 'all_avaliable':
-            restaurants = self.client.list_restaurants()
-            restaurant_ids = [r['restaurantGuid'] for r in restaurants if 'restaurantGuid' in r]
-        else:
-            restaurant_ids = self.cfg.restaurants.restaurants_ids.split(',')
+        restaurant_ids = self.cfg.restaurants.restaurants_ids.split(',')
+
+        if not restaurant_ids:
+            raise UserException("No restaurant IDs provided")
 
         for guid in restaurant_ids:
             if 'configuration_information' in self.cfg.endpoints:
