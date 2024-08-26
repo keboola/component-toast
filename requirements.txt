@@ -5,3 +5,4 @@ mock==5.1.0
 freezegun==1.4.0
 dataconf==2.5.0
 keboola.json-to-csv==0.0.12
+ratelimit==2.2.1
