@@ -53,8 +53,7 @@ class Component(ComponentBase):
         self.cfg: Configuration = Configuration.load_from_dict(self.configuration.parameters)
 
     def _init_client(self) -> None:
-        self.client = ToastClient(self.configuration.image_parameters.get("client_id"),
-                                  self.configuration.image_parameters.get("#client_secret"),
+        self.client = ToastClient(self.cfg.credentials.client_id, self.cfg.credentials.pswd_client_secret,
                                   self.cfg.credentials.url)
 
     def run(self):
@@ -62,10 +61,18 @@ class Component(ComponentBase):
         Main execution code
         """
 
-        restaurant_ids = self.cfg.restaurants.restaurants_ids.split(',')
+        if self.cfg.restaurants.restaurant_select_type == 'all_available':
+            restaurants = self.client.list_restaurants()
 
-        if not restaurant_ids:
-            raise UserException("No restaurant IDs provided")
+            mng_ids_raw = self.cfg.restaurants.management_group_ids.split(',')
+            mng_ids = [uid.strip() for uid in mng_ids_raw]
+
+            restaurant_ids = [r['restaurantGuid'] for r in restaurants if 'restaurantGuid' in r
+                              and r['managementGroupGuid'] in mng_ids]
+
+        else:
+            restaurant_ids_raw = self.cfg.restaurants.restaurants_ids.split(',')
+            restaurant_ids = [uid.strip() for uid in restaurant_ids_raw]
 
         for guid in restaurant_ids:
             if 'configuration_information' in self.cfg.endpoints:

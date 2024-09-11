@@ -49,12 +49,15 @@ class ConfigurationBase:
 @dataclass
 class Credentials(ConfigurationBase):
     url: str = ""
+    client_id: str = ""
+    pswd_client_secret: str = ""
 
 
 @dataclass
 class RestaurantsOptions(ConfigurationBase):
     restaurant_select_type: str = ""
     restaurants_ids: str = ""
+    management_group_ids: str = ""
 
 
 @dataclass

@@ -52,7 +52,7 @@ class ToastClient(HttpClient):
         except HTTPError as e:
             raise UserException(f"Error while listing restaurants: {e.response.json()['message']}")
 
-        return response
+        return response.json()
 
     def list_restaurants_in_group(self, restaurant_id: str, restaurant_group_id: str) -> list:
         """

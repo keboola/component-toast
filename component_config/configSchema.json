@@ -9,13 +9,26 @@
       "type": "object",
       "title": "Authorization",
       "required": [
-        "url"
+        "url",
+        "client_id",
+        "#client_secret"
       ],
       "properties": {
         "url": {
           "type": "string",
           "title": "Url of your Toast instance",
           "propertyOrder": 1
+        },
+        "client_id": {
+          "type": "string",
+          "title": "Client ID",
+          "propertyOrder": 2
+        },
+        "#client_secret": {
+          "type": "string",
+          "format": "password",
+          "title": "Client Secret",
+          "propertyOrder": 3
         }
       },
       "propertyOrder": 1
@@ -24,10 +37,43 @@
       "type": "object",
       "title": "Restaurants",
       "properties": {
+        "restaurant_select_type": {
+          "enum": [
+            "all_available",
+            "selected_ids"
+          ],
+          "type": "string",
+          "title": "Restaurants Selection",
+          "format": "checkbox",
+          "default": "incremental_load",
+          "options": {
+            "enum_titles": [
+              "All Available Restaurants In Specified Management Groups",
+              "Selected Restaurants"
+            ]
+          },
+          "description": "For download data from all available restaurants, partner-level credentials are required.",
+          "propertyOrder": 1
+        },
         "restaurants_ids": {
           "type": "string",
           "title": "ids of restaurants separated by comma",
-          "propertyOrder": 1
+          "propertyOrder": 2,
+          "options": {
+            "dependencies": {
+              "restaurant_select_type": "selected_ids"
+            }
+          }
+        },
+        "management_group_id": {
+          "type": "string",
+          "title": "Management Group IDs, separated by coma",
+          "propertyOrder": 3,
+            "options": {
+                "dependencies": {
+                "restaurant_select_type": "all_available"
+                }
+            }
         }
       },
       "propertyOrder": 2
