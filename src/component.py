@@ -18,6 +18,7 @@ import json
 from pathlib import Path
 from typing import Dict, IO
 from dataclasses import dataclass
+import datetime
 
 
 @dataclass
@@ -47,6 +48,8 @@ class Component(ComponentBase):
 
         self._init_configuration()
         self._init_client()
+        self.current_start_time = datetime.datetime.utcnow().timestamp()
+        self.state = self.get_state_file()
 
     def _init_configuration(self) -> None:
         self.validate_configuration_parameters(Configuration.get_dataclass_required_parameters())
@@ -84,9 +87,14 @@ class Component(ComponentBase):
             cache_record.file.close()
             self.write_manifest(cache_record.table_definition)
 
+        state = {'last_run': self.current_start_time}
+        self.write_state_file(state)
+        logging.debug(f'Writing State file: {state}')
+
     def download_orders(self, restaurant_id: str):
 
-        start_date, end_date = parse_date(self.cfg.sync_options.start_date, self.cfg.sync_options.end_date)
+        end_date, start_date = self.get_dates()
+
         orders = self.client.list_orders(restaurant_id, start_date, end_date)
 
         for batch in orders:
@@ -100,6 +108,17 @@ class Component(ComponentBase):
             for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
                 if table_name in out:
                     self.write_to_csv(out, table_name, table_mapping)
+
+    def get_dates(self):
+        if self.cfg.sync_options.start_date in {"last", "lastrun", "last run"}:
+            if self.state.get('last_run'):
+                start_date = datetime.datetime.fromtimestamp(self.state['last_run'])
+            else:
+                start_date = datetime.datetime.utcfromtimestamp(0)
+            end_date, _ = parse_date(self.cfg.sync_options.end_date, self.cfg.sync_options.end_date)
+        else:
+            start_date, end_date = parse_date(self.cfg.sync_options.start_date, self.cfg.sync_options.end_date)
+        return end_date, start_date
 
     def download_restaurant_config(self, restaurant_id: str):
         config = self.client.get_restaurant_configuration(restaurant_id)
