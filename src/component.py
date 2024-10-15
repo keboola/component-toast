@@ -107,7 +107,7 @@ class Component(ComponentBase):
 
             for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
                 if table_name in out:
-                    self.write_to_csv(out, table_name, table_mapping)
+                    self.write_to_csv(out, table_name, table_mapping, restaurant_id)
 
     def get_dates(self):
         if self.cfg.sync_options.start_date in {"last", "lastrun", "last run"}:
@@ -134,12 +134,15 @@ class Component(ComponentBase):
     def write_to_csv(self, parsed_data: dict,
                      table_name: str,
                      table_mapping: TableMapping,
+                     restaurant_id: str = None
                      ) -> None:
 
         if not self._writer_cache.get(table_name):
             incremental_load = self.cfg.destination.load_type.is_incremental()
             # TODO: use table_mapping.table_name for name once fixed in Parser
             columns = list(table_mapping.column_mappings.values())
+            if restaurant_id:
+                columns.insert(0,'restaurantGuid')
             table_def = self.create_out_table_definition(f'{table_name}.csv',
                                                          primary_key=table_mapping.primary_keys,
                                                          incremental=incremental_load,
@@ -153,6 +156,10 @@ class Component(ComponentBase):
 
         writer = self._writer_cache[table_name].writer
         for record in parsed_data[table_name]:
+            if restaurant_id:
+                record['restaurantGuid'] = restaurant_id
+            if record.get('JSON_parentId'):
+                del record['JSON_parentId']
             writer.writerow(record)
 
 
