@@ -1,10 +1,12 @@
-from keboola.component import UserException
-from keboola.http_client import HttpClient
+import logging
+import datetime
+from collections.abc import Iterator
+from typing import Dict
 from requests.exceptions import HTTPError
 from ratelimit import limits, sleep_and_retry
 
-import logging
-import datetime
+from keboola.component import UserException
+from keboola.http_client import HttpClient
 
 ORDERS_PAGE_SIZE = 100
 ORDERS_BATCH_SIZE = 1000
@@ -24,6 +26,7 @@ class ToastClient(HttpClient):
     @sleep_and_retry
     @limits(calls=10_000, period=900)
     def request(self, method, endpoint_path, **kwargs):
+        logging.debug(f"Requesting {method}, {endpoint_path}")
         return self._request_raw(method, endpoint_path, **kwargs)
 
     def get_token(self, client_id, client_secret):
@@ -40,7 +43,7 @@ class ToastClient(HttpClient):
             raise UserException(f"Could not refresh access token. "
                                 f"Received: {refresh_rsp.status_code} - {refresh_rsp.json()}.")
 
-    def list_restaurants(self):
+    def list_restaurants(self) -> list[Dict]:
         """
         List all orders
         """
@@ -54,7 +57,7 @@ class ToastClient(HttpClient):
 
         return response.json()
 
-    def list_restaurants_in_group(self, restaurant_id: str, restaurant_group_id: str) -> list:
+    def list_restaurants_in_group(self, restaurant_id: str, restaurant_group_id: str) -> list[str]:
         """
         List all orders
         """
@@ -67,9 +70,9 @@ class ToastClient(HttpClient):
         except HTTPError as e:
             raise UserException(f"Error while listing orders: {e.response.json()['message']}")
 
-        return [r['guid'] for r in response if 'guid' in r]
+        return [str(r['guid']) for r in response if 'guid' in r]
 
-    def get_restaurant_configuration(self, restaurant_id: str):
+    def get_restaurant_configuration(self, restaurant_id: str) -> Dict:
         self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
 
         try:
@@ -81,7 +84,7 @@ class ToastClient(HttpClient):
 
         return response.json()
 
-    def list_orders(self, restaurant_id: str, date_from: datetime, date_to: datetime) -> list:
+    def list_orders(self, restaurant_id: str, date_from: datetime, date_to: datetime) -> Iterator[list[Dict]]:
         """
         List all orders
         """

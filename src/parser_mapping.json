@@ -90,7 +90,48 @@
         ],
         "force_types": [
         ],
+        "child_tables": {
+          "payments": {
+        "table_name": "payments",
+        "column_mappings": {
+          "JSON_parentId": "JSON_parentId",
+          "guid": "guid",
+          "entityType": "entityType",
+          "externalId": "externalId",
+          "paidDate": "paidDate",
+          "paidBusinessDate": "paidBusinessDate",
+          "type": "type",
+          "cardEntryMode": "cardEntryMode",
+          "amount": "amount",
+          "tipAmount": "tipAmount",
+          "amountTendered": "amountTendered",
+          "cardType": "cardType",
+          "last4Digits": "last4Digits",
+          "originalProcessingFee": "originalProcessingFee",
+          "server": "server",
+          "cashDrawer": "cashDrawer",
+          "refundStatus": "refundStatus",
+          "refund": "refund",
+          "paymentStatus": "paymentStatus",
+          "voidInfo": "voidInfo",
+          "houseAccount": "houseAccount",
+          "otherPayment": "otherPayment",
+          "createdDevice": "createdDevice",
+          "lastModifiedDevice": "lastModifiedDevice",
+          "mcaRepaymentAmount": "mcaRepaymentAmount",
+          "cardPaymentId": "cardPaymentId",
+          "orderGuid": "orderGuid",
+          "checkGuid": "checkGuid",
+          "tenderTransactionGuid": "tenderTransactionGuid"
+        },
+        "primary_keys": [
+          "guid"
+        ],
+        "force_types": [
+        ],
         "child_tables": {}
+      }
+        }
       }
     }
   },

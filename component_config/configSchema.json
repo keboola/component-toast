@@ -57,7 +57,7 @@
         },
         "restaurants_ids": {
           "type": "string",
-          "title": "ids of restaurants separated by comma",
+          "title": "IDs of restaurants separated by comma",
           "propertyOrder": 2,
           "options": {
             "dependencies": {
@@ -65,7 +65,7 @@
             }
           }
         },
-        "management_group_id": {
+        "management_group_ids": {
           "type": "string",
           "title": "Management Group IDs, separated by coma",
           "propertyOrder": 3,
