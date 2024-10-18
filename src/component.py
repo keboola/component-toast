@@ -142,7 +142,7 @@ class Component(ComponentBase):
             # TODO: use table_mapping.table_name for name once fixed in Parser
             columns = list(table_mapping.column_mappings.values())
             if restaurant_id:
-                columns.insert(0,'restaurantGuid')
+                columns.insert(0, 'restaurantGuid')
             table_def = self.create_out_table_definition(f'{table_name}.csv',
                                                          primary_key=table_mapping.primary_keys,
                                                          incremental=incremental_load,
