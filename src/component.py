@@ -143,6 +143,9 @@ class Component(ComponentBase):
             columns = list(table_mapping.column_mappings.values())
             if restaurant_id:
                 columns.insert(0, 'restaurantGuid')
+            if 'JSON_parentId' in columns:
+                columns.remove('JSON_parentId')
+
             table_def = self.create_out_table_definition(f'{table_name}.csv',
                                                          primary_key=table_mapping.primary_keys,
                                                          incremental=incremental_load,
