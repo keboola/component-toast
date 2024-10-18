@@ -24,6 +24,7 @@ class ToastClient(HttpClient):
     @sleep_and_retry
     @limits(calls=10_000, period=900)
     def request(self, method, endpoint_path, **kwargs):
+        logging.debug(f"Requesting {method}, {endpoint_path}")
         return self._request_raw(method, endpoint_path, **kwargs)
 
     def get_token(self, client_id, client_secret):
