@@ -55,7 +55,7 @@
         "table_name": "checks",
         "column_mappings": {
           "orders_guid": "orders_guid",
-          "guid": "guid",
+          "guid": "checks_guid",
           "entityType": "entityType",
           "externalId": "externalId",
           "createdDate": "createdDate",
@@ -123,6 +123,72 @@
           "orderGuid": "orderGuid",
           "checkGuid": "checkGuid",
           "tenderTransactionGuid": "tenderTransactionGuid"
+        },
+        "primary_keys": [
+          "guid"
+        ],
+        "force_types": [
+        ],
+        "child_tables": {}
+      },
+          "selections": {
+        "table_name": "selections",
+        "column_mappings": {
+          "guid": "guid",
+          "entityType": "entityType",
+          "externalId": "externalId",
+          "item.guid": "item_guid",
+          "item.entityType": "item_entityType",
+          "item.multiLocationId": "item_multiLocationId",
+          "item.externalId": "item_externalId",
+          "itemGroup.guid": "itemGroup_guid",
+          "itemGroup.entityType": "itemGroup_entityType",
+          "itemGroup.multiLocationId": "itemGroup_multiLocationId",
+          "itemGroup.externalId": "itemGroup_externalId",
+          "optionGroup.guid": "optionGroup_guid",
+          "optionGroup.entityType": "optionGroup_entityType",
+          "optionGroup.multiLocationId": "optionGroup_multiLocationId",
+          "optionGroup.externalId": "optionGroup_externalId",
+          "preModifier.guid": "preModifier_guid",
+          "preModifier.entityType": "preModifier_entityType",
+          "preModifier.multiLocationId": "preModifier_multiLocationId",
+          "preModifier.externalId": "preModifier_externalId",
+          "salesCategory.guid": "salesCategory_guid",
+          "salesCategory.entityType": "salesCategory_entityType",
+          "salesCategory.multiLocationId": "salesCategory_multiLocationId",
+          "salesCategory.externalId": "salesCategory_externalId",
+          "quantity": "quantity",
+          "seatNumber": "seatNumber",
+          "unitOfMeasure": "unitOfMeasure",
+          "selectionType": "selectionType"
+        },
+        "primary_keys": [
+          "guid"
+        ],
+        "force_types": [
+        ],
+        "child_tables": {}
+      },
+
+          "appliedServiceCharges": {
+        "table_name": "service_charges",
+        "column_mappings": {
+          "guid": "guid",
+          "entityType": "entityType",
+          "externalId": "externalId",
+          "chargeAmount": "chargeAmount",
+          "serviceCharge.guid": "serviceCharge_guid",
+          "serviceCharge.entityType": "serviceCharge.entityType",
+          "serviceCharge.externalId": "serviceCharge_externalId",
+          "chargeType": "chargeType",
+          "name": "name",
+          "delivery": "delivery",
+          "takeout": "takeout",
+          "dineIn": "dineIn",
+          "gratuity": "gratuity",
+          "taxable": "taxable",
+          "serviceChargeCategory": "serviceChargeCategory",
+          "paymentGuid": "paymentGuid"
         },
         "primary_keys": [
           "guid"
