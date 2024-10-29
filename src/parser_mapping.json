@@ -47,15 +47,13 @@
       "excessFoodInfo": "excessFoodInfo"
     },
     "force_types": [
-      "guid",
-      "entityType"
     ],
     "child_tables": {
       "checks": {
         "table_name": "checks",
         "column_mappings": {
-          "orders_guid": "orders_guid",
           "guid": "guid",
+          "orders_guid": "orders_guid",
           "entityType": "entityType",
           "externalId": "externalId",
           "createdDate": "createdDate",
@@ -86,51 +84,127 @@
           "duration": "duration"
         },
         "primary_keys": [
-          "orders_guid"
+          "guid"
         ],
         "force_types": [
         ],
         "child_tables": {
           "payments": {
-        "table_name": "payments",
-        "column_mappings": {
-          "JSON_parentId": "JSON_parentId",
-          "guid": "guid",
-          "entityType": "entityType",
-          "externalId": "externalId",
-          "paidDate": "paidDate",
-          "paidBusinessDate": "paidBusinessDate",
-          "type": "type",
-          "cardEntryMode": "cardEntryMode",
-          "amount": "amount",
-          "tipAmount": "tipAmount",
-          "amountTendered": "amountTendered",
-          "cardType": "cardType",
-          "last4Digits": "last4Digits",
-          "originalProcessingFee": "originalProcessingFee",
-          "server": "server",
-          "cashDrawer": "cashDrawer",
-          "refundStatus": "refundStatus",
-          "refund": "refund",
-          "paymentStatus": "paymentStatus",
-          "voidInfo": "voidInfo",
-          "houseAccount": "houseAccount",
-          "otherPayment": "otherPayment",
-          "createdDevice": "createdDevice",
-          "lastModifiedDevice": "lastModifiedDevice",
-          "mcaRepaymentAmount": "mcaRepaymentAmount",
-          "cardPaymentId": "cardPaymentId",
-          "orderGuid": "orderGuid",
-          "checkGuid": "checkGuid",
-          "tenderTransactionGuid": "tenderTransactionGuid"
-        },
-        "primary_keys": [
-          "guid"
-        ],
-        "force_types": [
-        ],
-        "child_tables": {}
-      }
+            "table_name": "payments",
+            "column_mappings": {
+              "guid": "guid",
+              "orders_checks_guid": "orders_checks_guid",
+              "entityType": "entityType",
+              "externalId": "externalId",
+              "paidDate": "paidDate",
+              "paidBusinessDate": "paidBusinessDate",
+              "type": "type",
+              "cardEntryMode": "cardEntryMode",
+              "amount": "amount",
+              "tipAmount": "tipAmount",
+              "amountTendered": "amountTendered",
+              "cardType": "cardType",
+              "last4Digits": "last4Digits",
+              "originalProcessingFee": "originalProcessingFee",
+              "server": "server",
+              "cashDrawer": "cashDrawer",
+              "refundStatus": "refundStatus",
+              "refund": "refund",
+              "paymentStatus": "paymentStatus",
+              "voidInfo": "voidInfo",
+              "houseAccount": "houseAccount",
+              "otherPayment": "otherPayment",
+              "createdDevice": "createdDevice",
+              "lastModifiedDevice": "lastModifiedDevice",
+              "mcaRepaymentAmount": "mcaRepaymentAmount",
+              "cardPaymentId": "cardPaymentId",
+              "tenderTransactionGuid": "tenderTransactionGuid"
+            },
+            "primary_keys": [
+              "guid"
+            ],
+            "force_types": [
+            ],
+            "child_tables": {}
+          },
+          "selections": {
+            "table_name": "selections",
+            "column_mappings": {
+              "guid": "guid",
+              "orders_checks_guid": "orders_checks_guid",
+              "entityType": "entityType",
+              "externalId": "externalId",
+              "item.guid": "item_guid",
+              "item.entityType": "item_entityType",
+              "item.multiLocationId": "item_multiLocationId",
+              "item.externalId": "item_externalId",
+              "itemGroup.guid": "itemGroup_guid",
+              "itemGroup.entityType": "itemGroup_entityType",
+              "itemGroup.multiLocationId": "itemGroup_multiLocationId",
+              "itemGroup.externalId": "itemGroup_externalId",
+              "optionGroup.guid": "optionGroup_guid",
+              "optionGroup.entityType": "optionGroup_entityType",
+              "optionGroup.multiLocationId": "optionGroup_multiLocationId",
+              "optionGroup.externalId": "optionGroup_externalId",
+              "preModifier.guid": "preModifier_guid",
+              "preModifier.entityType": "preModifier_entityType",
+              "preModifier.multiLocationId": "preModifier_multiLocationId",
+              "preModifier.externalId": "preModifier_externalId",
+              "quantity": "quantity",
+              "seatNumber": "seatNumber",
+              "unitOfMeasure": "unitOfMeasure",
+              "selectionType": "selectionType",
+              "salesCategory.guid": "salesCategory_guid",
+              "salesCategory.entityType": "salesCategory_entityType",
+              "salesCategory.multiLocationId": "salesCategory_multiLocationId",
+              "salesCategory.externalId": "salesCategory_externalId",
+              "deferred": "deferred",
+              "preDiscountPrice": "preDiscountPrice",
+              "price": "price",
+              "tax": "tax",
+              "openPriceAmount": "openPriceAmount",
+              "externalPriceAmount": "externalPriceAmount"
+            },
+            "primary_keys": [
+              "guid"
+            ],
+            "force_types": [
+            ],
+            "child_tables": {}
+          },
+          "appliedServiceCharges": {
+            "table_name": "service_charges",
+            "column_mappings": {
+              "guid": "guid",
+              "orders_checks_guid": "orders_checks_guid",
+              "entityType": "entityType",
+              "externalId": "externalId",
+              "chargeAmount": "chargeAmount",
+              "serviceCharge.guid": "serviceCharge_guid",
+              "serviceCharge.entityType": "serviceCharge.entityType",
+              "serviceCharge.externalId": "serviceCharge_externalId",
+              "chargeType": "chargeType",
+              "name": "name",
+              "delivery": "delivery",
+              "takeout": "takeout",
+              "dineIn": "dineIn",
+              "gratuity": "gratuity",
+              "taxable": "taxable",
+              "refundDetails.refundAmount": "refundDetails_refundAmount",
+              "refundDetails.taxRefundAmount": "refundDetails_taxRefundAmount",
+              "refundDetails.refundTransaction.guid": "refundDetails_refundTransaction_guid",
+              "refundDetails.refundTransaction.entityType": "refundDetails_refundTransaction_entityType",
+              "serviceChargeCategory": "serviceChargeCategory",
+              "paymentGuid": "paymentGuid"
+            },
+            "primary_keys": [
+              "guid"
+            ],
+            "force_types": [
+            ],
+            "child_tables": {
+            }
+          }
         }
       }
     }
@@ -206,8 +280,8 @@
       "schedules": {
         "table_name": "schedules",
         "column_mappings": {
-          "schedules.daySchedules": "day_schedules",
           "configuration_guid": "configuration_guid",
+          "schedules.daySchedules": "day_schedules",
           "weekSchedule.monday": "weekSchedule_monday",
           "weekSchedule.tuesday": "weekSchedule_tuesday",
           "weekSchedule.wednesday": "weekSchedule_wednesday",
@@ -217,6 +291,7 @@
           "weekSchedule.sunday": "weekSchedule_sunday"
         },
         "primary_keys": [
+          "configuration_guid"
         ],
         "force_types": [
         ],
@@ -224,5 +299,4 @@
       }
     }
   }
-
 }

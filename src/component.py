@@ -143,8 +143,6 @@ class Component(ComponentBase):
             columns = list(table_mapping.column_mappings.values())
             if restaurant_id:
                 columns.insert(0, 'restaurantGuid')
-            if 'JSON_parentId' in columns:
-                columns.remove('JSON_parentId')
 
             table_def = self.create_out_table_definition(f'{table_name}.csv',
                                                          primary_key=table_mapping.primary_keys,
@@ -161,8 +159,6 @@ class Component(ComponentBase):
         for record in parsed_data[table_name]:
             if restaurant_id:
                 record['restaurantGuid'] = restaurant_id
-            if record.get('JSON_parentId'):
-                del record['JSON_parentId']
             writer.writerow(record)
 
 
