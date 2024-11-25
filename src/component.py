@@ -147,7 +147,8 @@ class Component(ComponentBase):
             table_def = self.create_out_table_definition(f'{table_name}.csv',
                                                          primary_key=table_mapping.primary_keys,
                                                          incremental=incremental_load,
-                                                         schema=columns)
+                                                         schema=columns,
+                                                         has_header=True)
 
             out = open(table_def.full_path, 'w', newline='')
             writer = csv.DictWriter(out, columns)
