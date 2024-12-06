@@ -48,7 +48,7 @@ class Component(ComponentBase):
 
         self._init_configuration()
         self._init_client()
-        self.current_start_time = datetime.datetime.utcnow().timestamp()
+        self.current_start_time = datetime.datetime.now(datetime.UTC).timestamp()
         self.state = self.get_state_file()
 
     def _init_configuration(self) -> None:
@@ -114,7 +114,7 @@ class Component(ComponentBase):
             if self.state.get('last_run'):
                 start_date = datetime.datetime.fromtimestamp(self.state['last_run'])
             else:
-                start_date = datetime.datetime.utcfromtimestamp(0)
+                start_date = datetime.datetime.fromtimestamp(0, datetime.UTC)
             end_date, _ = parse_date(self.cfg.sync_options.end_date, self.cfg.sync_options.end_date)
         else:
             start_date, end_date = parse_date(self.cfg.sync_options.start_date, self.cfg.sync_options.end_date)
