@@ -10,6 +10,8 @@ dateparser==1.2.0
     # via keboola-utils
 deprecated==1.2.15
     # via keboola-component
+flake8==7.1.1
+    # via -r requirements.in
 freezegun==1.5.1
     # via -r requirements.in
 idna==3.10
@@ -24,8 +26,14 @@ keboola-json-to-csv==0.0.12
     # via -r requirements.in
 keboola-utils==1.1.0
     # via -r requirements.in
+mccabe==0.7.0
+    # via flake8
 mock==5.1.0
     # via -r requirements.in
+pycodestyle==2.12.1
+    # via flake8
+pyflakes==3.2.0
+    # via flake8
 pygelf==0.4.2
     # via keboola-component
 pyhocon==0.3.61
