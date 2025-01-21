@@ -1,1 +1,1 @@
-Toast is a POS for restaurants
+Toast is a point of sale system for restaurants.

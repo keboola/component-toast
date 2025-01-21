@@ -1,11 +1,11 @@
 Toast
 =============
 
-This component extract data from the Toast API.
+This component extracts data from the Toast API.
 
-Supported endpoints
+Supported Endpoints
 ===================
-following endpoints are supported:
+The following endpoints are supported:
 - restaurant configuration
 - orders
 
@@ -16,7 +16,7 @@ Configuration
 Provide the URL, Client ID, and Client Secret to connect to your account.
 
 #### Restaurants
-You can choose to load all restaurants in management group or just a specific one.
+You can choose to load all restaurants in the management group or just a specific one.
 
 #### Endpoints
 You can select which endpoints you want to download.
@@ -35,7 +35,7 @@ List of tables, foreign keys, schema.
 Development
 -----------
 
-If required, change local data folder (the `CUSTOM_FOLDER` placeholder) path to
+If required, change the local data folder (replace the `CUSTOM_FOLDER` placeholder) path to
 your custom path in the `docker-compose.yml` file:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -44,7 +44,7 @@ your custom path in the `docker-compose.yml` file:
       - ./CUSTOM_FOLDER:/data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Clone this repository, init the workspace and run the component with following
+Clone this repository, initialize the workspace, and run the component with the following
 command:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -64,5 +64,4 @@ Integration
 ===========
 
 For information about deployment and integration with KBC, please refer to the
-[deployment section of developers
-documentation](https://developers.keboola.com/extend/component/deployment/)
+[deployment section of developers documentation](https://developers.keboola.com/extend/component/deployment/)

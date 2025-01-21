@@ -1,13 +1,13 @@
 {
   "type": "object",
-  "title": "Component configuration",
+  "title": "Component Configuration",
   "required": [
     "credentials"
   ],
   "properties": {
     "credentials": {
       "type": "object",
-      "title": "Authorization",
+      "title": "Authorization.",
       "required": [
         "url",
         "client_id",
@@ -16,12 +16,12 @@
       "properties": {
         "url": {
           "type": "string",
-          "title": "Url of your Toast instance",
+          "title": "URL of your Toast instance",
           "propertyOrder": 1
         },
         "client_id": {
           "type": "string",
-          "title": "Client ID",
+          "title": "Client ID.",
           "propertyOrder": 2
         },
         "#client_secret": {
@@ -35,7 +35,7 @@
     },
     "restaurants": {
       "type": "object",
-      "title": "Restaurants",
+      "title": "Restaurants.",
       "properties": {
         "restaurant_select_type": {
           "enum": [
@@ -43,7 +43,7 @@
             "selected_ids"
           ],
           "type": "string",
-          "title": "Restaurants Selection",
+          "title": "Restaurant Selection",
           "format": "checkbox",
           "default": "incremental_load",
           "options": {
@@ -52,12 +52,12 @@
               "Selected Restaurants"
             ]
           },
-          "description": "For download data from all available restaurants, partner-level credentials are required.",
+          "description": "To download data from all available restaurants, partner-level credentials are required.",
           "propertyOrder": 1
         },
         "restaurants_ids": {
           "type": "string",
-          "title": "IDs of restaurants separated by comma",
+          "title": "Restaurant IDs separated by commas.",
           "propertyOrder": 2,
           "options": {
             "dependencies": {
@@ -67,13 +67,13 @@
         },
         "management_group_ids": {
           "type": "string",
-          "title": "Management Group IDs, separated by coma",
+          "title": "Management group IDs, separated by comma.",
           "propertyOrder": 3,
-            "options": {
-                "dependencies": {
-                "restaurant_select_type": "all_available"
-                }
+          "options": {
+            "dependencies": {
+              "restaurant_select_type": "all_available"
             }
+          }
         }
       },
       "propertyOrder": 2
@@ -81,8 +81,8 @@
     "endpoints": {
       "type": "array",
       "format": "select",
-      "title": "Endpoints",
-      "description": "Endpoints to download data from",
+      "title": "Endpoints.",
+      "description": "Endpoints for downloading data from:",
       "uniqueItems": true,
       "items": {
         "options": {
@@ -109,16 +109,16 @@
       "properties": {
         "start_date": {
           "type": "string",
-          "title": "Date From",
+          "title": "Date: From",
           "default": "last run",
-          "description": "Date from which data is downloaded. Either date in YYYY-MM-DD format or dateparser string i.e. 5 days ago, 1 month ago, yesterday, etc. You can also set this as last run, which will fetch data from the last run of the component.",
+          "description": "Date from which the data is downloaded. Enter the date in YYYY-MM-DD format or use a date parser string like \"5 days ago,\" \"1 month ago,\" \"yesterday,\" etc. You can also choose \"last run,\" which will retrieve data from the component's most recent run.",
           "propertyOrder": 1
         },
         "end_date": {
           "type": "string",
-          "title": "Date to",
+          "title": "Could you please provide more context or clarify your request so I can better assist you?",
           "default": "now",
-          "description": "Date to which data is downloaded. Either date in YYYY-MM-DD format or dateparser string i.e. 5 days ago, 1 month ago, now, etc.",
+          "description": "Date to which the data is downloaded: either a date in YYYY-MM-DD format or a dateparser string, for example, \"5 days ago,\" \"1 month ago,\" \"now,\" etc.",
           "propertyOrder": 2
         }
       },
@@ -126,7 +126,7 @@
     },
     "destination": {
       "type": "object",
-      "title": "Destination",
+      "title": "Destination.",
       "required": [
         "load_type"
       ],
@@ -137,7 +137,7 @@
             "incremental_load"
           ],
           "type": "string",
-          "title": "Load Type",
+          "title": "Load type",
           "format": "checkbox",
           "default": "incremental_load",
           "options": {
@@ -146,7 +146,7 @@
               "Incremental Load"
             ]
           },
-          "description": "If Full load is used, the destination table will be overwritten every run. If incremental load is used, data will be upserted into the destination table.",
+          "description": "If a full load is used, the destination table will be overwritten with each run. If an incremental load is used, data will be upserted into the destination table.",
           "propertyOrder": 1
         }
       },
