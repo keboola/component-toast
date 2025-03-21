@@ -275,7 +275,12 @@
                   "voidBusinessDate": "voidBusinessDate",
                   "createdDate": "createdDate",
                   "preModifier": "preModifier",
-                  "modifiedDate": "modifiedDate"
+                  "modifiedDate": "modifiedDate",
+                  "refundDetails": "refundDetails",
+                  "refundDetails.refundAmount": "refundDetails_refundAmount",
+                  "refundDetails.taxRefundAmount": "refundDetails_taxRefundAmount",
+                  "refundDetails.refundTransaction.guid": "refundDetails_refundTransaction_guid",
+                  "refundDetails.refundTransaction.entityType": "refundDetails_refundTransaction_entityType"
                 },
                 "primary_keys": [
                   "guid"
