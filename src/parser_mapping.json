@@ -230,6 +230,30 @@
                 ],
                 "child_tables": {}
               },
+              "appliedTaxes": {
+                "table_name": "appliedTaxes",
+                "column_mappings": {
+                  "guid": "guid",
+                  "orders_checks_selections_guid": "orders_checks_selections_guid",
+                  "entityType": "entityType",
+                  "taxRate.guid": "taxRate_guid",
+                  "taxRate.entityType": "taxRate_entityType",
+                  "rate": "rate",
+                  "jurisdictionType": "jurisdictionType",
+                  "displayName": "displayName",
+                  "jurisdiction": "jurisdiction",
+                  "name": "name",
+                  "taxAmount": "taxAmount",
+                  "type": "type",
+                  "facilitatorCollectAndRemitTax": "facilitatorCollectAndRemitTax"
+                },
+                "primary_keys": [
+                  "guid"
+                ],
+                "force_types": [
+                ],
+                "child_tables": {}
+              },
               "modifiers": {
                 "table_name": "modifiers",
                 "column_mappings": {
