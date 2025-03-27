@@ -99,7 +99,7 @@ class Component(ComponentBase):
 
         for batch in orders:
             mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['orders'])
-            parser = Parser("orders", TableMapping.build_from_mapping_dict(self.parser_mapping['orders']), True)
+            parser = Parser("orders", TableMapping.build_from_mapping_dict(self.parser_mapping['orders']), False)
 
             out = parser.parse_data(batch)
 
