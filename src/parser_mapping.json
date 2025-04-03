@@ -124,8 +124,15 @@
               "server": "server",
               "cashDrawer": "cashDrawer",
               "refundStatus": "refundStatus",
-              "refund": "refund",
+              "-refund": "refund",
               "paymentStatus": "paymentStatus",
+              "refund.refundAmount": "refund_refundAmount",
+              "refund.tipRefundAmount": "refund_tipRefundAmount",
+              "refund.refundDate": "refund_refundDate",
+              "refund.refundBusinessDate": "refund_refundBusinessDate",
+              "refund.refundTransaction.guid": "refund_refundTransaction_guid",
+              "refund.refundTransaction.entityType": "refund_refundTransaction_entityType",
+              "refund.refundStrategy": "refund_refundStrategy",
               "voidInfo": "voidInfo",
               "houseAccount": "houseAccount",
               "otherPayment": "otherPayment",
@@ -147,6 +154,7 @@
             "column_mappings": {
               "guid": "guid",
               "orders_checks_guid": "orders_checks_guid",
+              "displayName": "displayName",
               "entityType": "entityType",
               "externalId": "externalId",
               "item.guid": "item_guid",
@@ -168,6 +176,10 @@
               "quantity": "quantity",
               "seatNumber": "seatNumber",
               "unitOfMeasure": "unitOfMeasure",
+              "refundDetails.refundAmount": "refundDetails_refundAmount",
+              "refundDetails.taxRefundAmount": "refundDetails_taxRefundAmount",
+              "refundDetails.refundTransaction.guid": "refundDetails_refundTransaction_guid",
+              "refundDetails.refundTransaction.entityType": "refundDetails_refundTransaction_entityType",
               "selectionType": "selectionType",
               "salesCategory.guid": "salesCategory_guid",
               "salesCategory.entityType": "salesCategory_entityType",
@@ -178,14 +190,130 @@
               "price": "price",
               "tax": "tax",
               "openPriceAmount": "openPriceAmount",
-              "externalPriceAmount": "externalPriceAmount"
+              "externalPriceAmount": "externalPriceAmount",
+              "receiptLinePrice": "receiptLinePrice",
+              "voidReason.guid": "voidReason_guid",
+              "voidReason.entityType": "voidReason_entityType",
+              "voidReason.externalId": "voidReason_externalId"
             },
             "primary_keys": [
               "guid"
             ],
             "force_types": [
             ],
-            "child_tables": {}
+            "child_tables": {
+              "appliedDiscounts": {
+                "table_name": "applied_discounts",
+                "column_mappings": {
+                  "guid": "guid",
+                  "orders_checks_selections_guid": "orders_checks_selections_guid",
+                  "entityType": "entityType",
+                  "externalId": "externalId",
+                  "name": "name",
+                  "discountAmount": "discountAmount",
+                  "nonTaxDiscountAmount": "nonTaxDiscountAmount",
+                  "discount": "discount",
+                  "triggers": "triggers",
+                  "approver": "approver",
+                  "processingState": "processingState",
+                  "appliedDiscountReason": "appliedDiscountReason",
+                  "loyaltyDetails": "loyaltyDetails",
+                  "comboItems": "comboItems",
+                  "appliedPromoCode": "appliedPromoCode",
+                  "discountType": "discountType",
+                  "discountPercent": "discountPercent"
+                },
+                "primary_keys": [
+                  "guid"
+                ],
+                "force_types": [
+                ],
+                "child_tables": {}
+              },
+              "appliedTaxes": {
+                "table_name": "appliedTaxes",
+                "column_mappings": {
+                  "guid": "guid",
+                  "orders_checks_selections_guid": "orders_checks_selections_guid",
+                  "entityType": "entityType",
+                  "taxRate.guid": "taxRate_guid",
+                  "taxRate.entityType": "taxRate_entityType",
+                  "rate": "rate",
+                  "jurisdictionType": "jurisdictionType",
+                  "displayName": "displayName",
+                  "jurisdiction": "jurisdiction",
+                  "name": "name",
+                  "taxAmount": "taxAmount",
+                  "type": "type",
+                  "facilitatorCollectAndRemitTax": "facilitatorCollectAndRemitTax"
+                },
+                "primary_keys": [
+                  "guid"
+                ],
+                "force_types": [
+                ],
+                "child_tables": {}
+              },
+              "modifiers": {
+                "table_name": "modifiers",
+                "column_mappings": {
+                  "guid": "guid",
+                  "orders_checks_selections_guid": "orders_checks_selections_guid",
+                  "schedules.daySchedules": "day_schedules",
+                  "entityType": "entityType",
+                  "externalId": "externalId",
+                  "deferred": "deferred",
+                  "preDiscountPrice": "preDiscountPrice",
+                  "voidReason": "voidReason",
+                  "optionGroup.guid": "optionGroup_guid",
+                  "optionGroup.entityType": "optionGroup_entityType",
+                  "optionGroup.externalId": "optionGroup_externalId",
+                  "optionGroup.multiLocationId": "optionGroup_multiLocationId",
+                  "displayName": "displayName",
+                  "seatNumber": "seatNumber",
+                  "voidDate": "voidDate",
+                  "fulfillmentStatus": "fulfillmentStatus",
+                  "optionGroupPricingMode": "optionGroupPricingMode",
+                  "giftCardSelectionInfo": "giftCardSelectionInfo",
+                  "salesCategory": "salesCategory",
+                  "splitOrigin": "splitOrigin",
+                  "selectionType": "selectionType",
+                  "price": "price",
+                  "voided": "voided",
+                  "appliedTaxes": "appliedTaxes",
+                  "storedValueTransactionId": "storedValueTransactionId",
+                  "itemGroup": "itemGroup",
+                  "item.guid": "item_guid",
+                  "item.entityType": "item_entityType",
+                  "item.externalId": "item_externalId",
+                  "item.multiLocationId": "item_multiLocationId",
+                  "taxInclusion": "taxInclusion",
+                  "quantity": "quantity",
+                  "receiptLinePrice": "receiptLinePrice",
+                  "unitOfMeasure": "unitOfMeasure",
+                  "toastGiftCard": "toastGiftCard",
+                  "tax": "tax",
+                  "diningOption.guid": "diningOption_guid",
+                  "diningOption.entityType": "diningOption_entityType",
+                  "diningOption.externalId": "diningOption_externalId",
+                  "voidBusinessDate": "voidBusinessDate",
+                  "createdDate": "createdDate",
+                  "preModifier": "preModifier",
+                  "modifiedDate": "modifiedDate",
+                  "no-refundDetails": "refundDetails",
+                  "refundDetails.refundAmount": "refundDetails_refundAmount",
+                  "refundDetails.taxRefundAmount": "refundDetails_taxRefundAmount",
+                  "refundDetails.refundTransaction.guid": "refundDetails_refundTransaction_guid",
+                  "refundDetails.refundTransaction.entityType": "refundDetails_refundTransaction_entityType"
+                },
+                "primary_keys": [
+                  "guid"
+                ],
+                "force_types": [
+                ],
+                "child_tables": {}
+              }
+            }
           },
           "appliedServiceCharges": {
             "table_name": "service_charges",
