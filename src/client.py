@@ -120,3 +120,159 @@ class ToastClient(HttpClient):
 
         if batch:
             yield batch
+
+    def get_cash_entries(self, restaurant_id: str, business_date: str) -> Dict:
+        """
+        Get cash entries for a specific business date
+
+        Args:
+            restaurant_id: The GUID of the restaurant
+            business_date: The business date in format YYYYMMDD
+
+        Returns:
+            List of cash entry objects
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        query = {
+            "businessDate": business_date
+        }
+
+        try:
+            response = self.request("GET", endpoint_path='cashmgmt/v1/entries', params=query)
+            response.raise_for_status()
+        except HTTPError as e:
+            raise UserException(f"Error while fetching cash entries: {e.response.json()['message']}")
+
+        return response.json()
+
+    def get_deposits(self, restaurant_id: str, business_date: str) -> Dict:
+        """
+        Get deposits for a specific business date
+
+        Args:
+            restaurant_id: The GUID of the restaurant
+            business_date: The business date in format YYYYMMDD
+
+        Returns:
+            List of deposit objects containing information about cash removed
+            from a restaurant to be deposited in a bank
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        query = {
+            "businessDate": business_date
+        }
+
+        try:
+            response = self.request("GET", endpoint_path='cashmgmt/v1/deposits', params=query)
+            response.raise_for_status()
+        except HTTPError as e:
+            raise UserException(f"Error while fetching deposits: {e.response.json()['message']}")
+
+        return response.json()
+
+    def get_employees(self, restaurant_id: str) -> Dict:
+        """
+        Get employee information from the labor API
+
+        Args:
+            restaurant_id: The GUID of the restaurant
+
+        Returns:
+            List of employee objects containing information about restaurant employees
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        try:
+            response = self.request("GET", endpoint_path='labor/v1/employees')
+            response.raise_for_status()
+        except HTTPError as e:
+            raise UserException(f"Error while fetching employees: {e.response.json()['message']}")
+
+        return response.json()
+
+    def get_shifts(self, restaurant_id: str, start_date: datetime.datetime, end_date: datetime.datetime) -> Dict:
+        """
+        Get shift information from the labor API
+
+        Args:
+            restaurant_id: The GUID of the restaurant
+            start_date: Start date and time of the period to match shifts
+            end_date: End date and time of the period to match shifts
+
+        Returns:
+            List of shift objects containing information about restaurant employee shifts
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+
+        query = {
+            "startDate": start_date.isoformat(timespec="milliseconds") + 'Z',
+            "endDate": end_date.isoformat(timespec="milliseconds") + 'Z'
+        }
+
+        try:
+            response = self.request("GET", endpoint_path='labor/v1/shifts', params=query)
+            response.raise_for_status()
+        except HTTPError as e:
+            raise UserException(f"Error while fetching shifts: {e.response.json()['message']}")
+
+        return response.json()
+
+    def get_jobs(self, restaurant_id: str, job_ids: list[str] = None) -> Dict:
+        """
+        Get job information from the labor API
+
+        Args:
+            restaurant_id: The GUID of the restaurant
+            job_ids: Optional list of job identifiers to filter results
+
+        Returns:
+            List of job objects containing information about restaurant jobs
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        query = {}
+        if job_ids:
+            query["jobIds"] = job_ids
+
+        try:
+            response = self.request("GET", endpoint_path='labor/v1/jobs', params=query)
+            response.raise_for_status()
+        except HTTPError as e:
+            raise UserException(f"Error while fetching jobs: {e.response.json()['message']}")
+
+        return response.json()
+
+    def get_time_entries(self, restaurant_id: str,
+                         start_date: datetime.datetime = None,
+                         end_date: datetime.datetime = None,
+                         ) -> Dict:
+        """
+        Get time entry information from the labor API
+
+        Args:
+            restaurant_id: The GUID of the restaurant
+            start_date: Optional start date and time of period to match time entries
+            end_date: Optional end date and time of period to match time entries
+
+        Returns:
+            List of time entry objects containing information about employee shift events
+
+        Note:
+            Valid requests must include one of:
+            - One or more time_entry_ids
+            - Both start_date and end_date
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        query = {'startDate': start_date.isoformat(timespec="milliseconds") + 'Z', 'endDate': end_date.isoformat(timespec="milliseconds") + 'Z'}
+
+        try:
+            response = self.request("GET", endpoint_path='labor/v1/timeEntries', params=query)
+            response.raise_for_status()
+        except HTTPError as e:
+            raise UserException(f"Error while fetching time entries: {e.response.json()['message']}")
+
+        return response.json()

@@ -82,6 +82,18 @@ class Component(ComponentBase):
                 self.download_restaurant_config(guid)
             if 'orders' in self.cfg.endpoints:
                 self.download_orders(guid)
+            if 'cash_entries' in self.cfg.endpoints:
+                self.download_cash_entries(guid)
+            if 'deposits' in self.cfg.endpoints:
+                self.download_deposits(guid)
+            if 'jobs' in self.cfg.endpoints:
+                self.download_jobs(guid)
+            if 'employees' in self.cfg.endpoints:
+                self.download_employees(guid)
+            if 'shifts' in self.cfg.endpoints:
+                self.download_shifts(guid)
+            if 'time_entries' in self.cfg.endpoints:
+                self.download_time_entries(guid)
 
         for table, cache_record in self._writer_cache.items():
             cache_record.file.close()
@@ -130,6 +142,163 @@ class Component(ComponentBase):
         for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
             if table_name in out:
                 self.write_to_csv(out, table_name, table_mapping)
+
+    def download_cash_entries(self, restaurant_id: str):
+        """
+        Download cash entries for a restaurant for the specified date range
+
+        Args:
+            restaurant_id: The GUID of the restaurant
+        """
+        end_date, start_date = self.get_dates()
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['cash_entries'])
+        parser = Parser("cash_entries", mapping, False)
+
+        # Format dates for the API call (YYYYMMDD format)
+        current_date = start_date
+        total_entries = 0
+
+        while current_date <= end_date:
+            business_date = current_date.strftime("%Y%m%d")
+            entries = self.client.get_cash_entries(restaurant_id, business_date)
+
+            if entries:
+                out = parser.parse_data(entries)
+                self.write_to_csv(out, "cash_entries", mapping, restaurant_id)
+            current_date += datetime.timedelta(days=1)
+
+    def download_deposits(self, restaurant_id: str) -> None:
+        """
+        Download deposits for a restaurant for the specified date range
+
+        Args:
+            restaurant_id: The GUID of the restaurant
+        """
+        end_date, start_date = self.get_dates()
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['deposits'])
+        parser = Parser("deposits", mapping, False)
+
+        # Process each day within the date range
+        current_date = start_date
+        while current_date <= end_date:
+            business_date = current_date.strftime("%Y%m%d")
+            deposits = self.client.get_deposits(restaurant_id, business_date)
+
+            if deposits:
+                out = parser.parse_data(deposits)
+                self.write_to_csv(out, "deposits", mapping, restaurant_id)
+            current_date += datetime.timedelta(days=1)
+
+    def download_jobs(self, restaurant_id: str) -> None:
+        """
+        Download job information for a restaurant
+
+        Args:
+            restaurant_id: The GUID of the restaurant
+        """
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['jobs'])
+        parser = Parser("jobs", mapping, False)
+
+        jobs = self.client.get_jobs(restaurant_id)
+
+        if jobs:
+            out = parser.parse_data(jobs)
+            self.write_to_csv(out, "jobs", mapping, restaurant_id)
+
+            # Process child tables if they exist in the parsed data
+            for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+                if table_name in out and table_name != "jobs":
+                    self.write_to_csv(out, table_name, table_mapping, restaurant_id)
+
+    def download_employees(self, restaurant_id: str) -> None:
+        """
+        Download employee information for a restaurant
+
+        Args:
+            restaurant_id: The GUID of the restaurant
+        """
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['employees'])
+        parser = Parser("employees", mapping, False)
+
+        employees = self.client.get_employees(restaurant_id)
+
+        if employees:
+            out = parser.parse_data(employees)
+            self.write_to_csv(out, "employees", mapping, restaurant_id)
+
+            # Process child tables if they exist in the parsed data
+            for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+                if table_name in out and table_name != "employees":
+                    self.write_to_csv(out, table_name, table_mapping, restaurant_id)
+
+    def download_shifts(self, restaurant_id: str) -> None:
+        """
+        Download shift information for a restaurant for the specified date range
+
+        Args:
+            restaurant_id: The GUID of the restaurant
+        """
+        end_date, start_date = self.get_dates()
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['shifts'])
+        parser = Parser("shifts", mapping, False)
+
+        chunk_start_date = start_date
+
+        while chunk_start_date < end_date:
+
+            chunk_end_date = min(
+                chunk_start_date + datetime.timedelta(days=30),
+                end_date
+            )
+
+            logging.info(f"Fetching shifts from {chunk_start_date} to {chunk_end_date}")
+
+            shifts = self.client.get_shifts(restaurant_id, chunk_start_date, chunk_end_date)
+            if shifts:
+                out = parser.parse_data(shifts)
+                self.write_to_csv(out, "shifts", mapping, restaurant_id)
+
+            chunk_start_date = chunk_end_date
+
+
+
+    def download_time_entries(self, restaurant_id: str) -> None:
+        """
+        Download time entry information for a restaurant for the specified date range
+
+        Args:
+            restaurant_id: The GUID of the restaurant
+        """
+        end_date, start_date = self.get_dates()
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['time_entries'])
+        parser = Parser("time_entries", mapping, False)
+
+        chunk_start_date = start_date
+
+        while chunk_start_date < end_date:
+            chunk_end_date = min(
+                chunk_start_date + datetime.timedelta(days=30),
+                end_date
+            )
+
+            logging.info(f"Fetching time entries from {chunk_start_date} to {chunk_end_date}")
+
+            time_entries = self.client.get_time_entries(
+                restaurant_id,
+                start_date=chunk_start_date,
+                end_date=chunk_end_date
+            )
+
+            if time_entries:
+                out = parser.parse_data(time_entries)
+                self.write_to_csv(out, "time_entries", mapping, restaurant_id)
+
+                # Process child tables if they exist in the parsed data
+                for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+                    if table_name in out and table_name != "time_entries":
+                        self.write_to_csv(out, table_name, table_mapping, restaurant_id)
+
+            chunk_start_date = chunk_end_date
 
     def write_to_csv(self, parsed_data: dict,
                      table_name: str,

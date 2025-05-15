@@ -69,11 +69,11 @@
           "type": "string",
           "title": "Management Group IDs, separated by coma",
           "propertyOrder": 3,
-            "options": {
-                "dependencies": {
-                "restaurant_select_type": "all_available"
-                }
+          "options": {
+            "dependencies": {
+              "restaurant_select_type": "all_available"
             }
+          }
         }
       },
       "propertyOrder": 2
@@ -88,12 +88,24 @@
         "options": {
           "enum_titles": [
             "Restaurant Configuration Information",
-            "Orders"
+            "Orders",
+            "Cash entries",
+            "Deposits",
+            "Jobs",
+            "Employees",
+            "Shifts",
+            "Time Entries"
           ]
         },
         "enum": [
           "configuration_information",
-          "orders"
+          "orders",
+          "cash_entries",
+          "deposits",
+          "jobs",
+          "employees",
+          "shifts",
+          "time_entries"
         ],
         "type": "string"
       },

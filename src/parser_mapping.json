@@ -352,6 +352,234 @@
       }
     }
   },
+  "cash_entries": {
+    "table_name": "cash_entries",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "amount": "amount",
+      "reason": "reason",
+      "date": "date",
+      "type": "type",
+      "cashDrawer.guid": "cashDrawer_guid",
+      "cashDrawer.entityType": "cashDrawer_entityType",
+      "payoutReason.guid": "payoutReason_guid",
+      "payoutReason.entityType": "payoutReason_entityType",
+      "noSaleReason.guid": "noSaleReason_guid",
+      "noSaleReason.entityType": "noSaleReason_entityType",
+      "undoes": "undoes",
+      "employee1.guid": "employee1_guid",
+      "employee1.entityType": "employee1_entityType",
+      "employee1.externalId": "employee1_externalId",
+      "employee2.guid": "employee2_guid",
+      "employee2.entityType": "employee2_entityType",
+      "employee2.externalId": "employee2_externalId",
+      "creatorOrShiftReviewSubject.guid": "creatorOrShiftReviewSubject_guid",
+      "creatorOrShiftReviewSubject.entityType": "creatorOrShiftReviewSubject_entityType",
+      "approverOrShiftReviewSubject.guid": "approverOrShiftReviewSubject_guid",
+      "approverOrShiftReviewSubject.entityType": "approverOrShiftReviewSubject_entityType"
+    },
+    "force_types": [],
+    "child_tables": {}
+  },
+  "deposits": {
+    "table_name": "deposits",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "amount": "amount",
+      "date": "date",
+      "undoes": "undoes",
+      "employee.guid": "employee_guid",
+      "employee.entityType": "employee_entityType",
+      "employee.externalId": "employee_externalId",
+      "creator.guid": "creator_guid",
+      "creator.entityType": "creator_entityType"
+    },
+    "force_types": [],
+    "child_tables": {}
+  },
+  "employees": {
+    "table_name": "employees",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "createdDate": "createdDate",
+      "modifiedDate": "modifiedDate",
+      "deletedDate": "deletedDate",
+      "firstName": "firstName",
+      "chosenName": "chosenName",
+      "lastName": "lastName",
+      "email": "email",
+      "phoneNumber": "phoneNumber",
+      "phoneNumberCountryCode": "phoneNumberCountryCode",
+      "passcode": "passcode",
+      "externalEmployeeId": "externalEmployeeId",
+      "deleted": "deleted",
+      "jobReferences": "jobReferences",
+      "wageOverrides": "wageOverrides",
+      "v2EmployeeGuid": "v2EmployeeGuid"
+    },
+    "force_types": [],
+    "child_tables": {
+      "jobReferences": {
+        "table_name": "employee_job_references",
+        "column_mappings": {
+          "guid": "guid",
+          "employees_guid": "employees_guid",
+          "entityType": "entityType",
+          "externalId": "externalId"
+        },
+        "primary_keys": [
+          "guid",
+          "employees_guid"
+        ],
+        "force_types": [],
+        "child_tables": {}
+      },
+      "wageOverrides": {
+        "table_name": "employee_wage_overrides",
+        "column_mappings": {
+          "employees_guid": "employees_guid",
+          "wage": "wage",
+          "jobReference.guid": "jobReference_guid",
+          "jobReference.entityType": "jobReference_entityType",
+          "jobReference.externalId": "jobReference_externalId"
+        },
+        "primary_keys": [
+          "employees_guid",
+          "jobReference_guid"
+        ],
+        "force_types": [],
+        "child_tables": {}
+      }
+    }
+  },
+  "shifts": {
+    "table_name": "shifts",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "createdDate": "createdDate",
+      "modifiedDate": "modifiedDate",
+      "deletedDate": "deletedDate",
+      "deleted": "deleted",
+      "jobReference.guid": "jobReference_guid",
+      "jobReference.entityType": "jobReference_entityType",
+      "jobReference.externalId": "jobReference_externalId",
+      "employeeReference.guid": "employeeReference_guid",
+      "employeeReference.entityType": "employeeReference_entityType",
+      "employeeReference.externalId": "employeeReference_externalId",
+      "inDate": "inDate",
+      "outDate": "outDate",
+      "scheduleConfig.guid": "scheduleConfig_guid",
+      "scheduleConfig.minBeforeClockIn": "scheduleConfig_minBeforeClockIn",
+      "scheduleConfig.minAfterClockIn": "scheduleConfig_minAfterClockIn",
+      "scheduleConfig.minBeforeClockOut": "scheduleConfig_minBeforeClockOut",
+      "scheduleConfig.minAfterClockOut": "scheduleConfig_minAfterClockOut"
+    },
+    "force_types": [],
+    "child_tables": {}
+  },
+  "jobs": {
+    "table_name": "jobs",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "createdDate": "createdDate",
+      "modifiedDate": "modifiedDate",
+      "deletedDate": "deletedDate",
+      "deleted": "deleted",
+      "title": "title",
+      "wageFrequency": "wageFrequency",
+      "defaultWage": "defaultWage",
+      "tipped": "tipped",
+      "code": "code",
+      "excludeFromReporting": "excludeFromReporting"
+    },
+    "force_types": [],
+    "child_tables": {}
+  },
+  "time_entries": {
+    "table_name": "time_entries",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "createdDate": "createdDate",
+      "modifiedDate": "modifiedDate",
+      "deletedDate": "deletedDate",
+      "deleted": "deleted",
+      "jobReference.guid": "jobReference_guid",
+      "jobReference.entityType": "jobReference_entityType",
+      "jobReference.externalId": "jobReference_externalId",
+      "employeeReference.guid": "employeeReference_guid",
+      "employeeReference.entityType": "employeeReference_entityType",
+      "employeeReference.externalId": "employeeReference_externalId",
+      "shiftReference.guid": "shiftReference_guid",
+      "shiftReference.entityType": "shiftReference_entityType",
+      "shiftReference.externalId": "shiftReference_externalId",
+      "inDate": "inDate",
+      "outDate": "outDate",
+      "autoClockedOut": "autoClockedOut",
+      "businessDate": "businessDate",
+      "regularHours": "regularHours",
+      "overtimeHours": "overtimeHours",
+      "hourlyWage": "hourlyWage",
+      "breaks": "breaks",
+      "declaredCashTips": "declaredCashTips",
+      "nonCashTips": "nonCashTips",
+      "cashGratuityServiceCharges": "cashGratuityServiceCharges",
+      "nonCashGratuityServiceCharges": "nonCashGratuityServiceCharges",
+      "tipsWithheld": "tipsWithheld",
+      "nonCashSales": "nonCashSales",
+      "cashSales": "cashSales"
+    },
+    "force_types": [],
+    "child_tables": {
+      "breaks": {
+        "table_name": "time_entry_breaks",
+        "column_mappings": {
+          "guid": "guid",
+          "time_entries_guid": "time_entries_guid",
+          "breakType.guid": "breakType_guid",
+          "breakType.entityType": "breakType_entityType",
+          "paid": "paid",
+          "inDate": "inDate",
+          "outDate": "outDate",
+          "missed": "missed",
+          "auditResponse": "auditResponse"
+        },
+        "primary_keys": [
+          "guid",
+          "time_entries_guid"
+        ],
+        "force_types": [],
+        "child_tables": {}
+      }
+    }
+  },
   "configuration": {
     "table_name": "configuration",
     "primary_keys": [
