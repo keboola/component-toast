@@ -13,12 +13,11 @@ ORDERS_BATCH_SIZE = 1000
 
 
 class ToastClient(HttpClient):
-
     def __init__(self, client_id, client_secret, url):
         super().__init__(url)
 
         self.access_token = self.get_token(client_id, client_secret)
-        self.update_auth_header({"Authorization": f'Bearer {self.access_token}'})
+        self.update_auth_header({"Authorization": f"Bearer {self.access_token}"})
 
     # API rate limits: https://doc.toasttab.com/doc/devguide/apiRateLimiting.html
     @sleep_and_retry
@@ -37,11 +36,12 @@ class ToastClient(HttpClient):
 
         if refresh_rsp.status_code == 200:
             logging.info("Successfully refreshed access token.")
-            return refresh_rsp.json()['token']['accessToken']
+            return refresh_rsp.json()["token"]["accessToken"]
 
         else:
-            raise UserException(f"Could not refresh access token. "
-                                f"Received: {refresh_rsp.status_code} - {refresh_rsp.json()}.")
+            raise UserException(
+                f"Could not refresh access token. Received: {refresh_rsp.status_code} - {refresh_rsp.json()}."
+            )
 
     def list_restaurants(self) -> list[Dict]:
         """
@@ -70,7 +70,7 @@ class ToastClient(HttpClient):
         except HTTPError as e:
             raise UserException(f"Error while listing orders: {e.response.json()['message']}")
 
-        return [str(r['guid']) for r in response if 'guid' in r]
+        return [str(r["guid"]) for r in response if "guid" in r]
 
     def get_restaurant_configuration(self, restaurant_id: str) -> Dict:
         self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
@@ -93,15 +93,14 @@ class ToastClient(HttpClient):
         page = 1
         while True:
             query = {
-                "endDate": date_to.isoformat(timespec="milliseconds") + '+0000',
+                "endDate": date_to.isoformat(timespec="milliseconds") + "+0000",
                 "page": page,
                 "pageSize": ORDERS_PAGE_SIZE,
-                "startDate": date_from.isoformat(timespec="milliseconds") + '+0000'
+                "startDate": date_from.isoformat(timespec="milliseconds") + "+0000",
             }
 
             try:
-
-                response = self.request("GET", endpoint_path='orders/v2/ordersBulk', params=query)
+                response = self.request("GET", endpoint_path="orders/v2/ordersBulk", params=query)
                 response.raise_for_status()
 
             except HTTPError as e:
@@ -112,7 +111,7 @@ class ToastClient(HttpClient):
 
             batch.extend(response.json())
 
-            if page % (ORDERS_BATCH_SIZE/ORDERS_PAGE_SIZE) == 0:
+            if page % (ORDERS_BATCH_SIZE / ORDERS_PAGE_SIZE) == 0:
                 yield batch
                 batch = []
 
@@ -134,12 +133,10 @@ class ToastClient(HttpClient):
         """
         self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
 
-        query = {
-            "businessDate": business_date
-        }
+        query = {"businessDate": business_date}
 
         try:
-            response = self.request("GET", endpoint_path='cashmgmt/v1/entries', params=query)
+            response = self.request("GET", endpoint_path="cashmgmt/v1/entries", params=query)
             response.raise_for_status()
         except HTTPError as e:
             raise UserException(f"Error while fetching cash entries: {e.response.json()['message']}")
@@ -160,12 +157,10 @@ class ToastClient(HttpClient):
         """
         self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
 
-        query = {
-            "businessDate": business_date
-        }
+        query = {"businessDate": business_date}
 
         try:
-            response = self.request("GET", endpoint_path='cashmgmt/v1/deposits', params=query)
+            response = self.request("GET", endpoint_path="cashmgmt/v1/deposits", params=query)
             response.raise_for_status()
         except HTTPError as e:
             raise UserException(f"Error while fetching deposits: {e.response.json()['message']}")
@@ -185,7 +180,7 @@ class ToastClient(HttpClient):
         self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
 
         try:
-            response = self.request("GET", endpoint_path='labor/v1/employees')
+            response = self.request("GET", endpoint_path="labor/v1/employees")
             response.raise_for_status()
         except HTTPError as e:
             raise UserException(f"Error while fetching employees: {e.response.json()['message']}")
@@ -206,14 +201,13 @@ class ToastClient(HttpClient):
         """
         self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
 
-
         query = {
-            "startDate": start_date.isoformat(timespec="milliseconds") + 'Z',
-            "endDate": end_date.isoformat(timespec="milliseconds") + 'Z'
+            "startDate": start_date.isoformat(timespec="milliseconds") + "Z",
+            "endDate": end_date.isoformat(timespec="milliseconds") + "Z",
         }
 
         try:
-            response = self.request("GET", endpoint_path='labor/v1/shifts', params=query)
+            response = self.request("GET", endpoint_path="labor/v1/shifts", params=query)
             response.raise_for_status()
         except HTTPError as e:
             raise UserException(f"Error while fetching shifts: {e.response.json()['message']}")
@@ -238,17 +232,19 @@ class ToastClient(HttpClient):
             query["jobIds"] = job_ids
 
         try:
-            response = self.request("GET", endpoint_path='labor/v1/jobs', params=query)
+            response = self.request("GET", endpoint_path="labor/v1/jobs", params=query)
             response.raise_for_status()
         except HTTPError as e:
             raise UserException(f"Error while fetching jobs: {e.response.json()['message']}")
 
         return response.json()
 
-    def get_time_entries(self, restaurant_id: str,
-                         start_date: datetime.datetime = None,
-                         end_date: datetime.datetime = None,
-                         ) -> Dict:
+    def get_time_entries(
+        self,
+        restaurant_id: str,
+        start_date: datetime.datetime = None,
+        end_date: datetime.datetime = None,
+    ) -> Dict:
         """
         Get time entry information from the labor API
 
@@ -267,10 +263,13 @@ class ToastClient(HttpClient):
         """
         self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
 
-        query = {'startDate': start_date.isoformat(timespec="milliseconds") + 'Z', 'endDate': end_date.isoformat(timespec="milliseconds") + 'Z'}
+        query = {
+            "startDate": start_date.isoformat(timespec="milliseconds") + "Z",
+            "endDate": end_date.isoformat(timespec="milliseconds") + "Z",
+        }
 
         try:
-            response = self.request("GET", endpoint_path='labor/v1/timeEntries', params=query)
+            response = self.request("GET", endpoint_path="labor/v1/timeEntries", params=query)
             response.raise_for_status()
         except HTTPError as e:
             raise UserException(f"Error while fetching time entries: {e.response.json()['message']}")
