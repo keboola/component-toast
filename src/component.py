@@ -160,7 +160,6 @@ class Component(ComponentBase):
 
         # Format dates for the API call (YYYYMMDD format)
         current_date = start_date
-        total_entries = 0
 
         while current_date <= end_date:
             business_date = current_date.strftime("%Y%m%d")
