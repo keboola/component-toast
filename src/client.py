@@ -120,3 +120,18 @@ class ToastClient(HttpClient):
 
         if batch:
             yield batch
+
+    def dining_options(self, restaurant_id: str) -> list[Dict]:
+        """
+        List all dinning options
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        try:
+            response = self.request("GET", "config/v2/diningOptions")
+            response.raise_for_status()
+
+        except HTTPError as e:
+            raise UserException(f"Error while getting dining options: {e.response.json()['message']}")
+
+        return response.json()

@@ -441,5 +441,21 @@
         "child_tables": {}
       }
     }
+  },
+  "dining_options": {
+    "table_name": "dining_options",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "name": "name",
+      "behavior": "behavior",
+      "curbside": "curbside"
+    },
+    "force_types": [],
+    "child_tables": {}
   }
 }
