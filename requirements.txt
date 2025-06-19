@@ -64,11 +64,9 @@ six==1.17.0
     # via
     #   isodate
     #   python-dateutil
-tzdata==2024.2 ; sys_platform == 'win32'
-    # via tzlocal
 tzlocal==5.2
     # via dateparser
-urllib3==2.3.0
+urllib3==2.5.0
     # via requests
 wrapt==1.17.2
     # via deprecated
