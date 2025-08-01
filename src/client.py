@@ -135,3 +135,18 @@ class ToastClient(HttpClient):
             raise UserException(f"Error while getting dining options: {e.response.json()['message']}")
 
         return response.json()
+
+    def employees(self, restaurant_id: str) -> list[Dict]:
+        """
+        List of the employees for the specific restaurant
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        try:
+            response = self.request("GET", "labor/v1/employees")
+            response.raise_for_status()
+
+        except HTTPError as e:
+            raise UserException(f"Error while getting employees data: {e.response.json()['message']}")
+
+        return response.json()

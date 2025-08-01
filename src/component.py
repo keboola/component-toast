@@ -84,6 +84,8 @@ class Component(ComponentBase):
                 self.download_orders(guid)
             if 'dining_options' in self.cfg.endpoints:
                 self.download_dining_options(guid)
+            if 'employees' in self.cfg.endpoints:
+                self.download_employees(guid)
 
         for table, cache_record in self._writer_cache.items():
             cache_record.file.close()
@@ -92,6 +94,17 @@ class Component(ComponentBase):
         state = {'last_run': self.current_start_time}
         self.write_state_file(state)
         logging.debug(f'Writing State file: {state}')
+
+    def download_employees(self, restaurant_id: str):
+        employees = self.client.employees(restaurant_id)
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['employees'])
+
+        parser = Parser("employees", mapping, False)
+        out = parser.parse_data(employees)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping)
 
     def download_dining_options(self, restaurant_id: str):
         dining_options = self.client.dining_options(restaurant_id)
@@ -105,9 +118,7 @@ class Component(ComponentBase):
                 self.write_to_csv(out, table_name, table_mapping)
 
     def download_orders(self, restaurant_id: str):
-
         end_date, start_date = self.get_dates()
-
         orders = self.client.list_orders(restaurant_id, start_date, end_date)
 
         for batch in orders:

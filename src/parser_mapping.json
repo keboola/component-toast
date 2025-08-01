@@ -457,5 +457,59 @@
     },
     "force_types": [],
     "child_tables": {}
+  },
+  "employees": {
+    "table_name": "employees",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "createdDate": "createdDate",
+      "modifiedDate": "modifiedDate",
+      "deletedDate": "deletedDate",
+      "firstName": "firstName",
+      "chosenName": "chosenName",
+      "lastName": "lastName",
+      "email": "email",
+      "phoneNumber": "phoneNumber",
+      "phoneNumberCountryCode": "phoneNumberCountryCode",
+      "externalEmployeeId": "externalEmployeeId",
+      "deleted": "deleted",
+      "jobReferences": "jobReferences",
+      "wageOverrides": "wageOverrides",
+      "v2EmployeeGuid": "v2EmployeeGuid"
+    },
+    "force_types": [],
+    "child_tables": {
+      "jobReferences": {
+        "table_name": "jobReferences",
+        "column_mappings": {
+          "guid": "guid"
+        },
+        "primary_keys": [
+          "guid"
+        ],
+        "force_types": [],
+        "child_tables": {}
+      },
+      "wageOverrides": {
+        "table_name": "wageOverrides",
+        "column_mappings": {
+          "wage": "wage",
+          "jobReference.guid": "jobReference_guid",
+          "jobReference.entityType": "jobReference_entityType",
+          "jobReference.externalId": "jobReference_externalId"
+        },
+        "primary_keys": [
+          "jobReference_guid",
+          "jobReference_entityType"
+        ],
+        "force_types": [],
+        "child_tables": {}
+      }
+    }
   }
 }

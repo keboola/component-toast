@@ -89,13 +89,15 @@
           "enum_titles": [
             "Restaurant Configuration Information",
             "Orders",
-            "Dining Options"
+            "Dining Options",
+            "Employees"
           ]
         },
         "enum": [
           "configuration_information",
           "orders",
-          "dining_options"
+          "dining_options",
+          "employees"
         ],
         "type": "string"
       },
