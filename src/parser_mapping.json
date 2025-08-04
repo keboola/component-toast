@@ -347,6 +347,34 @@
             ],
             "child_tables": {
             }
+          },
+          "appliedDiscounts": {
+            "table_name": "applied_discounts",
+            "column_mappings": {
+              "guid": "guid",
+              "orders_checks_selections_guid": "orders_checks_selections_guid",
+              "entityType": "entityType",
+              "externalId": "externalId",
+              "name": "name",
+              "discountAmount": "discountAmount",
+              "nonTaxDiscountAmount": "nonTaxDiscountAmount",
+              "discount": "discount",
+              "triggers": "triggers",
+              "approver": "approver",
+              "processingState": "processingState",
+              "appliedDiscountReason": "appliedDiscountReason",
+              "loyaltyDetails": "loyaltyDetails",
+              "comboItems": "comboItems",
+              "appliedPromoCode": "appliedPromoCode",
+              "discountType": "discountType",
+              "discountPercent": "discountPercent"
+            },
+            "primary_keys": [
+              "guid"
+            ],
+            "force_types": [
+            ],
+            "child_tables": {}
           }
         }
       }
