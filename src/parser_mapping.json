@@ -352,7 +352,7 @@
             "table_name": "applied_discounts",
             "column_mappings": {
               "guid": "guid",
-              "orders_checks_selections_guid": "orders_checks_selections_guid",
+              "orders_checks_guid": "orders_checks_guid",
               "entityType": "entityType",
               "externalId": "externalId",
               "name": "name",
