@@ -84,6 +84,8 @@ class Component(ComponentBase):
                 self.download_orders(guid)
             if 'dining_options' in self.cfg.endpoints:
                 self.download_dining_options(guid)
+            if 'menus' in self.cfg.endpoints:
+                self.download_menus(guid)
 
         for table, cache_record in self._writer_cache.items():
             cache_record.file.close()
@@ -104,8 +106,18 @@ class Component(ComponentBase):
             if table_name in out:
                 self.write_to_csv(out, table_name, table_mapping)
 
-    def download_orders(self, restaurant_id: str):
+    def download_menus(self, restaurant_id: str):
+        menus = self.client.menus(restaurant_id)
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['menus'])
 
+        parser = Parser("menus", mapping, False)
+        out = parser.parse_data(menus)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping)
+
+    def download_orders(self, restaurant_id: str):
         end_date, start_date = self.get_dates()
 
         orders = self.client.list_orders(restaurant_id, start_date, end_date)

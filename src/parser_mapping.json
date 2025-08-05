@@ -457,5 +457,102 @@
     },
     "force_types": [],
     "child_tables": {}
+  },
+  "menus": {
+    "table_name": "menus",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "name": "name",
+      "multiLocationId": "multiLocationId",
+      "masterId": "masterId",
+      "description": "description",
+      "posButtonColorLight": "posButtonColorLight",
+      "posButtonColorDark": "posButtonColorDark",
+      "highResImage": "highResImage",
+      "image": "image",
+      "menuGroups": "menuGroups"
+    },
+    "force_types": [],
+    "child_tables": {
+      "menuGroups": {
+        "table_name": "menuGroups",
+        "column_mappings": {
+          "guid": "guid",
+          "menusGuid": "menus_guid",
+          "name": "name",
+          "multiLocationId": "multiLocationId",
+          "masterId": "masterId",
+          "description": "description",
+          "posName": "posName",
+          "posButtonColorLight": "posButtonColorLight",
+          "posButtonColorDark": "posButtonColorDark",
+          "image": "image"
+        },
+        "primary_keys": [
+          "guid"
+        ],
+        "force_types": [
+        ],
+        "child_tables": {
+          "itemTags": {
+              "table_name": "itemTags",
+              "column_mappings": {
+                "guid": "guid",
+                "menusMenuGroupsGuid": "menus_menuGroups_guid",
+                "name": "name"
+              },
+              "primary_keys": [
+                "guid"
+              ],
+              "force_types": [
+              ],
+              "child_tables": {}
+          },
+          "menuItems": {
+            "table_name": "menuItems",
+            "column_mappings": {
+              "guid": "guid",
+              "menusMenuGroupsGuid": "menus_menuGroups_guid",
+              "name": "name",
+              "kitchenName": "kitchenName",
+              "multiLocationId": "multiLocationId",
+              "masterId": "masterId",
+              "description": "description",
+              "posName": "posName",
+              "posButtonColorLight": "posButtonColorLight",
+              "posButtonColorDark": "posButtonColorDark",
+              "image": "image",
+              "price": "price",
+              "pricingStrategy": "pricingStrategy",
+              "isDeferred": "isDeferred",
+              "isDiscountable": "isDiscountable",
+              "salesCategory.name": "salesCategory_name",
+              "salesCategory.guid": "salesCategory_guid",
+              "plu": "plu",
+              "sku": "sku",
+              "calories": "calories",
+              "unitOfMeasure": "unitOfMeasure",
+              "prepTime": "prepTime",
+              "length": "length",
+              "height": "height",
+              "width": "width",
+              "dimensionUnitOfMeasure": "dimensionUnitOfMeasure",
+              "weight": "weight",
+              "weightUnitOfMeasure": "weightUnitOfMeasure",
+              "guestCount": "guestCount"
+            },
+            "primary_keys": [
+              "guid"
+            ],
+            "force_types": [
+            ],
+            "child_tables": {}
+          }
+        }
+      }
+    }
   }
 }
