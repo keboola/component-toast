@@ -77,7 +77,9 @@ class Component(ComponentBase):
             restaurant_ids_raw = self.cfg.restaurants.restaurants_ids.split(',')
             restaurant_ids = [uid.strip() for uid in restaurant_ids_raw]
 
+        logging.info(f'Processing {len(restaurant_ids)} restaurant(s).')
         for guid in restaurant_ids:
+            logging.info(f'Processing restaurant: {guid}')
             if 'configuration_information' in self.cfg.endpoints:
                 self.download_restaurant_config(guid)
             if 'orders' in self.cfg.endpoints:
