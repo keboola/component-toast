@@ -12,6 +12,19 @@ ORDERS_PAGE_SIZE = 100
 ORDERS_BATCH_SIZE = 1000
 
 
+def _parse_http_error(e) -> str:
+    try:
+        body = e.response.json()
+        message = body.get("message", str(e))
+        code = body.get("code")
+        request_id = body.get("requestId")
+        code_part = f"[code={code}] " if code is not None else ""
+        request_id_part = f" (requestId={request_id})" if request_id else ""
+        return f"{code_part}{message}{request_id_part}"
+    except Exception:
+        return e.response.text or str(e)
+
+
 class ToastClient(HttpClient):
 
     def __init__(self, client_id, client_secret, url):
@@ -53,7 +66,7 @@ class ToastClient(HttpClient):
             response.raise_for_status()
 
         except HTTPError as e:
-            raise UserException(f"Error while listing restaurants: {e.response.json()['message']}")
+            raise UserException(f"Error while listing restaurants: {_parse_http_error(e)}")
 
         return response.json()
 
@@ -68,7 +81,7 @@ class ToastClient(HttpClient):
             response.raise_for_status()
 
         except HTTPError as e:
-            raise UserException(f"Error while listing orders: {e.response.json()['message']}")
+            raise UserException(f"Error while listing orders: {_parse_http_error(e)}")
 
         return [str(r['guid']) for r in response if 'guid' in r]
 
@@ -80,7 +93,7 @@ class ToastClient(HttpClient):
             response.raise_for_status()
 
         except HTTPError as e:
-            raise UserException(f"Error while listing restaurant details: {e.response.json()['message']}")
+            raise UserException(f"Error while listing restaurant details: {_parse_http_error(e)}")
 
         return response.json()
 
@@ -105,7 +118,7 @@ class ToastClient(HttpClient):
                 response.raise_for_status()
 
             except HTTPError as e:
-                raise UserException(f"Error while listing orders: {e.response.json()['message']}")
+                raise UserException(f"Error while listing orders: {_parse_http_error(e)}")
 
             if not response.json():
                 break
@@ -132,7 +145,7 @@ class ToastClient(HttpClient):
             response.raise_for_status()
 
         except HTTPError as e:
-            raise UserException(f"Error while getting dining options: {e.response.json()['message']}")
+            raise UserException(f"Error while getting dining options: {_parse_http_error(e)}")
 
         return response.json()
 
@@ -147,7 +160,7 @@ class ToastClient(HttpClient):
             response.raise_for_status()
 
         except HTTPError as e:
-            raise UserException(f"Error while getting dining options: {e.response.json()['message']}")
+            raise UserException(f"Error while getting dining options: {_parse_http_error(e)}")
 
         data = response.json()
         return data.get("menus", [])
