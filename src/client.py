@@ -1,4 +1,5 @@
 import logging
+import time
 import datetime
 from collections.abc import Iterator
 from typing import Dict
@@ -10,6 +11,10 @@ from keboola.http_client import HttpClient
 
 ORDERS_PAGE_SIZE = 100
 ORDERS_BATCH_SIZE = 1000
+
+MAX_RETRIES = 3
+RETRY_BASE_DELAY = 5
+RETRYABLE_STATUS_CODES = {403, 429, 500, 502, 503, 504}
 
 
 def _parse_http_error(e) -> str:
@@ -38,9 +43,33 @@ class ToastClient(HttpClient):
     @limits(calls=20, period=1)
     @sleep_and_retry
     @limits(calls=10_000, period=900)
-    def request(self, method, endpoint_path, **kwargs):
+    def _rate_limited_request(self, method, endpoint_path, **kwargs):
         logging.debug(f"Requesting {method}, {endpoint_path}")
         return self._request_raw(method, endpoint_path, **kwargs)
+
+    def request(self, method, endpoint_path, **kwargs):
+        """
+        Make an HTTP request with retry logic for transient errors.
+        Retries up to MAX_RETRIES times with exponential backoff for retryable status codes.
+        """
+        for attempt in range(1, MAX_RETRIES + 1):
+            response = self._rate_limited_request(method, endpoint_path, **kwargs)
+            if response.status_code < 400:
+                return response
+            if response.status_code not in RETRYABLE_STATUS_CODES or attempt == MAX_RETRIES:
+                return response
+            delay = RETRY_BASE_DELAY * (2 ** (attempt - 1))
+            try:
+                error_body = response.json()
+                error_msg = error_body.get('message', response.text)
+            except Exception:
+                error_msg = response.text
+            logging.warning(
+                f"Request {method} {endpoint_path} returned {response.status_code}: {error_msg}. "
+                f"Retrying in {delay}s (attempt {attempt}/{MAX_RETRIES})."
+            )
+            time.sleep(delay)
+        return response
 
     def get_token(self, client_id, client_secret):
         headers = {"Content-Type": "application/json"}
