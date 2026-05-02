@@ -58,14 +58,12 @@ ratelimit==2.2.1
     # via -r requirements.in
 regex==2024.11.6
     # via dateparser
-requests==2.32.3
+requests==2.32.4
     # via keboola-http-client
 six==1.17.0
     # via
     #   isodate
     #   python-dateutil
-tzdata==2024.2 ; sys_platform == 'win32'
-    # via tzlocal
 tzlocal==5.2
     # via dateparser
 urllib3==2.3.0
