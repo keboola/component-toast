@@ -194,7 +194,9 @@
               "receiptLinePrice": "receiptLinePrice",
               "voidReason.guid": "voidReason_guid",
               "voidReason.entityType": "voidReason_entityType",
-              "voidReason.externalId": "voidReason_externalId"
+              "voidReason.externalId": "voidReason_externalId",
+              "itemGroup_name": "itemGroup_name",
+              "salesCategory_name": "salesCategory_name"
             },
             "primary_keys": [
               "guid"

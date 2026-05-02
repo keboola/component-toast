@@ -48,6 +48,8 @@ class Component(ComponentBase):
 
         self._init_configuration()
         self._init_client()
+        self._item_group_names: dict[str, str] = {}
+        self._sales_category_names: dict[str, str] = {}
         self.current_start_time = datetime.datetime.now(datetime.UTC).timestamp()
         self.state = self.get_state_file()
 
@@ -80,12 +82,12 @@ class Component(ComponentBase):
         for guid in restaurant_ids:
             if 'configuration_information' in self.cfg.endpoints:
                 self.download_restaurant_config(guid)
+            if 'menus' in self.cfg.endpoints:
+                self.download_menus(guid)
             if 'orders' in self.cfg.endpoints:
                 self.download_orders(guid)
             if 'dining_options' in self.cfg.endpoints:
                 self.download_dining_options(guid)
-            if 'menus' in self.cfg.endpoints:
-                self.download_menus(guid)
 
         for table, cache_record in self._writer_cache.items():
             cache_record.file.close()
@@ -109,9 +111,16 @@ class Component(ComponentBase):
     def download_menus(self, restaurant_id: str):
         menus = self.client.menus(restaurant_id)
         mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['menus'])
-
         parser = Parser("menus", mapping, False)
         out = parser.parse_data(menus)
+
+        for group in out.get("menus_menuGroups", []):
+            if group.get("guid") and group.get("name"):
+                self._item_group_names[group["guid"]] = group["name"]
+
+        for item in out.get("menus_menuGroups_menuItems", []):
+            if item.get("salesCategory_guid") and item.get("salesCategory_name"):
+                self._sales_category_names[item["salesCategory_guid"]] = item["salesCategory_name"]
 
         for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
             if table_name in out:
@@ -129,6 +138,10 @@ class Component(ComponentBase):
             out = parser.parse_data(batch)
 
             logging.info(f'Writing {len(out["orders"])} orders to output')
+
+            for record in out.get("orders_checks_selections", []):
+                record["itemGroup_name"] = self._item_group_names.get(record.get("itemGroup_guid"), "")
+                record["salesCategory_name"] = self._sales_category_names.get(record.get("salesCategory_guid"), "")
 
             for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
                 if table_name in out:
