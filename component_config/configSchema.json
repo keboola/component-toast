@@ -90,14 +90,16 @@
             "Restaurant Configuration Information",
             "Orders",
             "Dining Options",
-            "Menus"
+            "Menus",
+            "Employees"
           ]
         },
         "enum": [
           "configuration_information",
           "orders",
           "dining_options",
-          "menus"
+          "menus",
+          "employees"
         ],
         "type": "string"
       },
