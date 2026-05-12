@@ -91,7 +91,8 @@
             "Orders",
             "Dining Options",
             "Menus",
-            "Employees"
+            "Employees",
+            "Payments"
           ]
         },
         "enum": [
@@ -99,7 +100,8 @@
           "orders",
           "dining_options",
           "menus",
-          "employees"
+          "employees",
+          "payments"
         ],
         "type": "string"
       },

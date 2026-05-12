@@ -179,3 +179,33 @@ class ToastClient(HttpClient):
             raise UserException(f"Error while getting employees: {_parse_http_error(e)}")
 
         return response.json()
+
+    def list_payment_ids(self, restaurant_id: str, business_date: str) -> list[str]:
+        """
+        List payment GUIDs for a given business date (format: yyyyMMdd)
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        try:
+            response = self.request("GET", "orders/v2/payments", params={"paidBusinessDate": business_date})
+            response.raise_for_status()
+
+        except HTTPError as e:
+            raise UserException(f"Error while listing payment IDs: {_parse_http_error(e)}")
+
+        return response.json()
+
+    def get_payment(self, restaurant_id: str, payment_guid: str) -> Dict:
+        """
+        Get detailed payment information by GUID
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        try:
+            response = self.request("GET", f"orders/v2/payments/{payment_guid}")
+            response.raise_for_status()
+
+        except HTTPError as e:
+            raise UserException(f"Error while getting payment {payment_guid}: {_parse_http_error(e)}")
+
+        return response.json()

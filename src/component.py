@@ -88,6 +88,8 @@ class Component(ComponentBase):
                 self.download_menus(guid)
             if 'employees' in self.cfg.endpoints:
                 self.download_employees(guid)
+            if 'payments' in self.cfg.endpoints:
+                self.download_payments(guid)
 
         for table, cache_record in self._writer_cache.items():
             cache_record.file.close()
@@ -129,6 +131,35 @@ class Component(ComponentBase):
         for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
             if table_name in out:
                 self.write_to_csv(out, table_name, table_mapping)
+
+    def download_payments(self, restaurant_id: str):
+        end_date, start_date = self.get_dates()
+
+        current_date = start_date
+        all_payments = []
+        while current_date <= end_date:
+            business_date = current_date.strftime('%Y%m%d')
+            logging.info(f'Fetching payment IDs for business date {business_date}')
+
+            payment_ids = self.client.list_payment_ids(restaurant_id, business_date)
+            logging.info(f'Found {len(payment_ids)} payments for {business_date}')
+
+            for payment_guid in payment_ids:
+                payment = self.client.get_payment(restaurant_id, payment_guid)
+                all_payments.append(payment)
+
+            current_date += datetime.timedelta(days=1)
+
+        if not all_payments:
+            return
+
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['payments'])
+        parser = Parser("payments", mapping, False)
+        out = parser.parse_data(all_payments)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping, restaurant_id)
 
     def download_orders(self, restaurant_id: str):
         end_date, start_date = self.get_dates()
