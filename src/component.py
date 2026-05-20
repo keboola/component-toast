@@ -92,6 +92,14 @@ class Component(ComponentBase):
                 self.download_payments(guid)
             if 'time_entries' in self.cfg.endpoints:
                 self.download_time_entries(guid)
+            if 'jobs' in self.cfg.endpoints:
+                self.download_jobs(guid)
+            if 'shifts' in self.cfg.endpoints:
+                self.download_shifts(guid)
+            if 'tip_withholding' in self.cfg.endpoints:
+                self.download_tip_withholding(guid)
+            if 'break_types' in self.cfg.endpoints:
+                self.download_break_types(guid)
 
         for table, cache_record in self._writer_cache.items():
             cache_record.file.close()
@@ -179,6 +187,66 @@ class Component(ComponentBase):
         for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
             if table_name in out:
                 self.write_to_csv(out, table_name, table_mapping, restaurant_id)
+
+    def download_jobs(self, restaurant_id: str):
+        jobs = self.client.jobs(restaurant_id)
+        logging.info(f'Fetched {len(jobs)} jobs')
+
+        if not jobs:
+            return
+
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['jobs'])
+        parser = Parser("jobs", mapping, False)
+        out = parser.parse_data(jobs)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping)
+
+    def download_shifts(self, restaurant_id: str):
+        end_date, start_date = self.get_dates()
+
+        shifts = self.client.shifts(restaurant_id, start_date, end_date)
+        logging.info(f'Fetched {len(shifts)} shifts')
+
+        if not shifts:
+            return
+
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['shifts'])
+        parser = Parser("shifts", mapping, False)
+        out = parser.parse_data(shifts)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping, restaurant_id)
+
+    def download_tip_withholding(self, restaurant_id: str):
+        tip_withholding = self.client.tip_withholding(restaurant_id)
+
+        data = [tip_withholding] if isinstance(tip_withholding, dict) else tip_withholding
+
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['tip_withholding'])
+        parser = Parser("tip_withholding", mapping, False)
+        out = parser.parse_data(data)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping)
+
+    def download_break_types(self, restaurant_id: str):
+        break_types = self.client.break_types(restaurant_id)
+        logging.info(f'Fetched {len(break_types)} break types')
+
+        if not break_types:
+            return
+
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['break_types'])
+        parser = Parser("break_types", mapping, False)
+        out = parser.parse_data(break_types)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping)
 
     def download_orders(self, restaurant_id: str):
         end_date, start_date = self.get_dates()

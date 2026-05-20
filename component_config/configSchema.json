@@ -93,7 +93,11 @@
             "Menus",
             "Employees",
             "Payments",
-            "Time Entries"
+            "Time Entries",
+            "Jobs",
+            "Shifts",
+            "Tip Withholding",
+            "Break Types"
           ]
         },
         "enum": [
@@ -103,7 +107,11 @@
           "menus",
           "employees",
           "payments",
-          "time_entries"
+          "time_entries",
+          "jobs",
+          "shifts",
+          "tip_withholding",
+          "break_types"
         ],
         "type": "string"
       },

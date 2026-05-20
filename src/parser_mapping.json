@@ -486,6 +486,94 @@
     "force_types": [],
     "child_tables": {}
   },
+  "jobs": {
+    "table_name": "jobs",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "createdDate": "createdDate",
+      "modifiedDate": "modifiedDate",
+      "deletedDate": "deletedDate",
+      "title": "title",
+      "deleted": "deleted",
+      "wageFrequency": "wageFrequency",
+      "defaultWage": "defaultWage",
+      "tipped": "tipped",
+      "code": "code",
+      "excludeFromReporting": "excludeFromReporting"
+    },
+    "force_types": [],
+    "child_tables": {}
+  },
+  "shifts": {
+    "table_name": "shifts",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "createdDate": "createdDate",
+      "modifiedDate": "modifiedDate",
+      "deletedDate": "deletedDate",
+      "deleted": "deleted",
+      "jobReference.guid": "jobReference_guid",
+      "jobReference.entityType": "jobReference_entityType",
+      "jobReference.externalId": "jobReference_externalId",
+      "employeeReference.guid": "employeeReference_guid",
+      "employeeReference.entityType": "employeeReference_entityType",
+      "employeeReference.externalId": "employeeReference_externalId",
+      "inDate": "inDate",
+      "outDate": "outDate",
+      "scheduleConfig.guid": "scheduleConfig_guid",
+      "scheduleConfig.minBeforeClockIn": "scheduleConfig_minBeforeClockIn",
+      "scheduleConfig.minAfterClockIn": "scheduleConfig_minAfterClockIn",
+      "scheduleConfig.minBeforeClockOut": "scheduleConfig_minBeforeClockOut",
+      "scheduleConfig.minAfterClockOut": "scheduleConfig_minAfterClockOut"
+    },
+    "force_types": [],
+    "child_tables": {}
+  },
+  "tip_withholding": {
+    "table_name": "tip_withholding",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "enabled": "enabled",
+      "percentage": "percentage"
+    },
+    "force_types": [],
+    "child_tables": {}
+  },
+  "break_types": {
+    "table_name": "break_types",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "name": "name",
+      "active": "active",
+      "paid": "paid",
+      "duration": "duration",
+      "enforceMinimumTime": "enforceMinimumTime",
+      "trackMissedBreaks": "trackMissedBreaks",
+      "breakIntervalHrs": "breakIntervalHrs",
+      "breakIntervalMins": "breakIntervalMins",
+      "trackBreakAcknowledgement": "trackBreakAcknowledgement"
+    },
+    "force_types": [],
+    "child_tables": {}
+  },
   "time_entries": {
     "table_name": "time_entries",
     "primary_keys": [

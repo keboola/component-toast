@@ -229,3 +229,68 @@ class ToastClient(HttpClient):
             raise UserException(f"Error while getting time entries: {_parse_http_error(e)}")
 
         return response.json()
+
+    def jobs(self, restaurant_id: str) -> list[Dict]:
+        """
+        List all jobs for a restaurant
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        try:
+            response = self.request("GET", "labor/v1/jobs")
+            response.raise_for_status()
+
+        except HTTPError as e:
+            raise UserException(f"Error while getting jobs: {_parse_http_error(e)}")
+
+        return response.json()
+
+    def shifts(self, restaurant_id: str, date_from: datetime, date_to: datetime) -> list[Dict]:
+        """
+        List shifts for a given date range
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        params = {
+            "startDate": date_from.isoformat(timespec="milliseconds") + '+0000',
+            "endDate": date_to.isoformat(timespec="milliseconds") + '+0000'
+        }
+
+        try:
+            response = self.request("GET", "labor/v1/shifts", params=params)
+            response.raise_for_status()
+
+        except HTTPError as e:
+            raise UserException(f"Error while getting shifts: {_parse_http_error(e)}")
+
+        return response.json()
+
+    def tip_withholding(self, restaurant_id: str) -> Dict:
+        """
+        Get tip withholding configuration for a restaurant
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        try:
+            response = self.request("GET", "config/v2/tipWithholding")
+            response.raise_for_status()
+
+        except HTTPError as e:
+            raise UserException(f"Error while getting tip withholding: {_parse_http_error(e)}")
+
+        return response.json()
+
+    def break_types(self, restaurant_id: str) -> list[Dict]:
+        """
+        List all break types for a restaurant
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        try:
+            response = self.request("GET", "config/v2/breakTypes")
+            response.raise_for_status()
+
+        except HTTPError as e:
+            raise UserException(f"Error while getting break types: {_parse_http_error(e)}")
+
+        return response.json()
