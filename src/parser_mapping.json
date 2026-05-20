@@ -486,6 +486,69 @@
     "force_types": [],
     "child_tables": {}
   },
+  "time_entries": {
+    "table_name": "time_entries",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "createdDate": "createdDate",
+      "modifiedDate": "modifiedDate",
+      "deletedDate": "deletedDate",
+      "deleted": "deleted",
+      "jobReference.guid": "jobReference_guid",
+      "jobReference.entityType": "jobReference_entityType",
+      "jobReference.externalId": "jobReference_externalId",
+      "employeeReference.guid": "employeeReference_guid",
+      "employeeReference.entityType": "employeeReference_entityType",
+      "employeeReference.externalId": "employeeReference_externalId",
+      "shiftReference.guid": "shiftReference_guid",
+      "shiftReference.entityType": "shiftReference_entityType",
+      "shiftReference.externalId": "shiftReference_externalId",
+      "inDate": "inDate",
+      "outDate": "outDate",
+      "autoClockedOut": "autoClockedOut",
+      "businessDate": "businessDate",
+      "regularHours": "regularHours",
+      "overtimeHours": "overtimeHours",
+      "hourlyWage": "hourlyWage",
+      "breaks": "breaks",
+      "declaredCashTips": "declaredCashTips",
+      "nonCashTips": "nonCashTips",
+      "nonCashTipsRoundingLoss": "nonCashTipsRoundingLoss",
+      "cashGratuityServiceCharges": "cashGratuityServiceCharges",
+      "nonCashGratuityServiceCharges": "nonCashGratuityServiceCharges",
+      "tipsWithheld": "tipsWithheld",
+      "nonCashSales": "nonCashSales",
+      "cashSales": "cashSales"
+    },
+    "force_types": [],
+    "child_tables": {
+      "breaks": {
+        "table_name": "breaks",
+        "column_mappings": {
+          "guid": "guid",
+          "time_entries_guid": "time_entries_guid",
+          "breakType.guid": "breakType_guid",
+          "breakType.entityType": "breakType_entityType",
+          "paid": "paid",
+          "inDate": "inDate",
+          "outDate": "outDate",
+          "missed": "missed",
+          "waived": "waived",
+          "auditResponse": "auditResponse"
+        },
+        "primary_keys": [
+          "guid"
+        ],
+        "force_types": [],
+        "child_tables": {}
+      }
+    }
+  },
   "payments": {
     "table_name": "payments",
     "primary_keys": [

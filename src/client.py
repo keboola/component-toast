@@ -209,3 +209,23 @@ class ToastClient(HttpClient):
             raise UserException(f"Error while getting payment {payment_guid}: {_parse_http_error(e)}")
 
         return response.json()
+
+    def time_entries(self, restaurant_id: str, date_from: datetime, date_to: datetime) -> list[Dict]:
+        """
+        List time entries for a given date range
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        params = {
+            "startDate": date_from.isoformat(timespec="milliseconds") + '+0000',
+            "endDate": date_to.isoformat(timespec="milliseconds") + '+0000'
+        }
+
+        try:
+            response = self.request("GET", "labor/v1/timeEntries", params=params)
+            response.raise_for_status()
+
+        except HTTPError as e:
+            raise UserException(f"Error while getting time entries: {_parse_http_error(e)}")
+
+        return response.json()
