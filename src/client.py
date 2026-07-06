@@ -259,3 +259,18 @@ class ToastClient(HttpClient):
             raise UserException(f"Error while getting break types: {_parse_http_error(e)}")
 
         return response.json()
+
+    def sales_categories(self, restaurant_id: str) -> list[Dict]:
+        """
+        List all sales categories for a restaurant
+        """
+        self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
+
+        try:
+            response = self.request("GET", "config/v2/salesCategories")
+            response.raise_for_status()
+
+        except HTTPError as e:
+            raise UserException(f"Error while getting sales categories: {_parse_http_error(e)}")
+
+        return response.json()

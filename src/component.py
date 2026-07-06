@@ -96,6 +96,8 @@ class Component(ComponentBase):
                 self.download_jobs(guid)
             if 'break_types' in self.cfg.endpoints:
                 self.download_break_types(guid)
+            if 'sales_categories' in self.cfg.endpoints:
+                self.download_sales_categories(guid)
 
         for table, cache_record in self._writer_cache.items():
             cache_record.file.close()
@@ -209,6 +211,21 @@ class Component(ComponentBase):
         mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['break_types'])
         parser = Parser("break_types", mapping, False)
         out = parser.parse_data(break_types)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping)
+
+    def download_sales_categories(self, restaurant_id: str):
+        sales_categories = self.client.sales_categories(restaurant_id)
+        logging.info(f'Fetched {len(sales_categories)} sales categories')
+
+        if not sales_categories:
+            return
+
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['sales_categories'])
+        parser = Parser("sales_categories", mapping, False)
+        out = parser.parse_data(sales_categories)
 
         for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
             if table_name in out:

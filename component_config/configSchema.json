@@ -95,7 +95,8 @@
             "Payments",
             "Time Entries",
             "Jobs",
-            "Break Types"
+            "Break Types",
+            "Sales Categories"
           ]
         },
         "enum": [
@@ -107,7 +108,8 @@
           "payments",
           "time_entries",
           "jobs",
-          "break_types"
+          "break_types",
+          "sales_categories"
         ],
         "type": "string"
       },
