@@ -95,8 +95,6 @@
             "Payments",
             "Time Entries",
             "Jobs",
-            "Shifts",
-            "Tip Withholding",
             "Break Types"
           ]
         },
@@ -109,8 +107,6 @@
           "payments",
           "time_entries",
           "jobs",
-          "shifts",
-          "tip_withholding",
           "break_types"
         ],
         "type": "string"

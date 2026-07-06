@@ -94,10 +94,6 @@ class Component(ComponentBase):
                 self.download_time_entries(guid)
             if 'jobs' in self.cfg.endpoints:
                 self.download_jobs(guid)
-            if 'shifts' in self.cfg.endpoints:
-                self.download_shifts(guid)
-            if 'tip_withholding' in self.cfg.endpoints:
-                self.download_tip_withholding(guid)
             if 'break_types' in self.cfg.endpoints:
                 self.download_break_types(guid)
 
@@ -198,36 +194,6 @@ class Component(ComponentBase):
         mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['jobs'])
         parser = Parser("jobs", mapping, False)
         out = parser.parse_data(jobs)
-
-        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
-            if table_name in out:
-                self.write_to_csv(out, table_name, table_mapping)
-
-    def download_shifts(self, restaurant_id: str):
-        end_date, start_date = self.get_dates()
-
-        shifts = self.client.shifts(restaurant_id, start_date, end_date)
-        logging.info(f'Fetched {len(shifts)} shifts')
-
-        if not shifts:
-            return
-
-        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['shifts'])
-        parser = Parser("shifts", mapping, False)
-        out = parser.parse_data(shifts)
-
-        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
-            if table_name in out:
-                self.write_to_csv(out, table_name, table_mapping, restaurant_id)
-
-    def download_tip_withholding(self, restaurant_id: str):
-        tip_withholding = self.client.tip_withholding(restaurant_id)
-
-        data = [tip_withholding] if isinstance(tip_withholding, dict) else tip_withholding
-
-        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['tip_withholding'])
-        parser = Parser("tip_withholding", mapping, False)
-        out = parser.parse_data(data)
 
         for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
             if table_name in out:
