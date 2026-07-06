@@ -15,10 +15,17 @@ from configuration import Configuration
 from client import ToastClient
 
 import json
+import warnings
 from pathlib import Path
 from typing import Dict, IO
 from dataclasses import dataclass
 import datetime
+
+warnings.filterwarnings(
+    "ignore",
+    message="Parsing dates involving a day of month without a year",
+    category=DeprecationWarning,
+)
 
 
 @dataclass
