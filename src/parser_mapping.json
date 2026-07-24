@@ -556,6 +556,60 @@
     "force_types": [],
     "child_tables": {}
   },
+  "menu_items": {
+    "table_name": "menu_items",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "name": "name",
+      "calories": "calories",
+      "sku": "sku",
+      "plu": "plu",
+      "orderableOnline": "orderableOnline",
+      "visibility": "visibility",
+      "type": "type",
+      "optionGroups": "optionGroups",
+      "inheritOptionGroups": "inheritOptionGroups",
+      "images": "images",
+      "unitOfMeasure": "unitOfMeasure",
+      "inheritUnitOfMeasure": "inheritUnitOfMeasure"
+    },
+    "force_types": [],
+    "child_tables": {
+      "optionGroups": {
+        "table_name": "optionGroups",
+        "column_mappings": {
+          "guid": "guid",
+          "menu_items_guid": "menu_items_guid",
+          "entityType": "entityType",
+          "externalId": "externalId"
+        },
+        "primary_keys": [
+          "guid",
+          "menu_items_guid"
+        ],
+        "force_types": [],
+        "child_tables": {}
+      },
+      "images": {
+        "table_name": "images",
+        "column_mappings": {
+          "menu_items_guid": "menu_items_guid",
+          "url": "url"
+        },
+        "primary_keys": [
+          "menu_items_guid",
+          "url"
+        ],
+        "force_types": [],
+        "child_tables": {}
+      }
+    }
+  },
   "time_entries": {
     "table_name": "time_entries",
     "primary_keys": [

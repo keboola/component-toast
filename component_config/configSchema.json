@@ -97,7 +97,8 @@
             "Jobs",
             "Break Types",
             "Sales Categories",
-            "Void Reasons"
+            "Void Reasons",
+            "Menu Items"
           ]
         },
         "enum": [
@@ -111,7 +112,8 @@
           "jobs",
           "break_types",
           "sales_categories",
-          "void_reasons"
+          "void_reasons",
+          "menu_items"
         ],
         "type": "string"
       },

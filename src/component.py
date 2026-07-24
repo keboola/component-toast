@@ -107,6 +107,8 @@ class Component(ComponentBase):
                 self.download_sales_categories(guid)
             if 'void_reasons' in self.cfg.endpoints:
                 self.download_void_reasons(guid)
+            if 'menu_items' in self.cfg.endpoints:
+                self.download_menu_items(guid)
 
         for table, cache_record in self._writer_cache.items():
             cache_record.file.close()
@@ -250,6 +252,21 @@ class Component(ComponentBase):
         mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['void_reasons'])
         parser = Parser("void_reasons", mapping, False)
         out = parser.parse_data(void_reasons)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping)
+
+    def download_menu_items(self, restaurant_id: str):
+        menu_items = self.client.menu_items(restaurant_id)
+        logging.info(f'Fetched {len(menu_items)} menu items')
+
+        if not menu_items:
+            return
+
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['menu_items'])
+        parser = Parser("menu_items", mapping, False)
+        out = parser.parse_data(menu_items)
 
         for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
             if table_name in out:
