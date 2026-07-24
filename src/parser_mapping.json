@@ -486,6 +486,315 @@
     "force_types": [],
     "child_tables": {}
   },
+  "jobs": {
+    "table_name": "jobs",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "createdDate": "createdDate",
+      "modifiedDate": "modifiedDate",
+      "deletedDate": "deletedDate",
+      "title": "title",
+      "deleted": "deleted",
+      "wageFrequency": "wageFrequency",
+      "defaultWage": "defaultWage",
+      "tipped": "tipped",
+      "code": "code",
+      "excludeFromReporting": "excludeFromReporting"
+    },
+    "force_types": [],
+    "child_tables": {}
+  },
+  "break_types": {
+    "table_name": "break_types",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "name": "name",
+      "active": "active",
+      "paid": "paid",
+      "duration": "duration",
+      "enforceMinimumTime": "enforceMinimumTime",
+      "trackMissedBreaks": "trackMissedBreaks",
+      "breakIntervalHrs": "breakIntervalHrs",
+      "breakIntervalMins": "breakIntervalMins",
+      "trackBreakAcknowledgement": "trackBreakAcknowledgement"
+    },
+    "force_types": [],
+    "child_tables": {}
+  },
+  "sales_categories": {
+    "table_name": "sales_categories",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "name": "name"
+    },
+    "force_types": [],
+    "child_tables": {}
+  },
+  "void_reasons": {
+    "table_name": "void_reasons",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "name": "name"
+    },
+    "force_types": [],
+    "child_tables": {}
+  },
+  "menu_items": {
+    "table_name": "menu_items",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "name": "name",
+      "calories": "calories",
+      "sku": "sku",
+      "plu": "plu",
+      "orderableOnline": "orderableOnline",
+      "visibility": "visibility",
+      "type": "type",
+      "optionGroups": "optionGroups",
+      "inheritOptionGroups": "inheritOptionGroups",
+      "images": "images",
+      "unitOfMeasure": "unitOfMeasure",
+      "inheritUnitOfMeasure": "inheritUnitOfMeasure"
+    },
+    "force_types": [],
+    "child_tables": {
+      "optionGroups": {
+        "table_name": "optionGroups",
+        "column_mappings": {
+          "guid": "guid",
+          "menu_items_guid": "menu_items_guid",
+          "entityType": "entityType",
+          "externalId": "externalId"
+        },
+        "primary_keys": [
+          "guid",
+          "menu_items_guid"
+        ],
+        "force_types": [],
+        "child_tables": {}
+      },
+      "images": {
+        "table_name": "images",
+        "column_mappings": {
+          "menu_items_guid": "menu_items_guid",
+          "url": "url"
+        },
+        "primary_keys": [
+          "menu_items_guid",
+          "url"
+        ],
+        "force_types": [],
+        "child_tables": {}
+      }
+    }
+  },
+  "time_entries": {
+    "table_name": "time_entries",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "createdDate": "createdDate",
+      "modifiedDate": "modifiedDate",
+      "deletedDate": "deletedDate",
+      "deleted": "deleted",
+      "jobReference.guid": "jobReference_guid",
+      "jobReference.entityType": "jobReference_entityType",
+      "jobReference.externalId": "jobReference_externalId",
+      "employeeReference.guid": "employeeReference_guid",
+      "employeeReference.entityType": "employeeReference_entityType",
+      "employeeReference.externalId": "employeeReference_externalId",
+      "shiftReference.guid": "shiftReference_guid",
+      "shiftReference.entityType": "shiftReference_entityType",
+      "shiftReference.externalId": "shiftReference_externalId",
+      "inDate": "inDate",
+      "outDate": "outDate",
+      "autoClockedOut": "autoClockedOut",
+      "businessDate": "businessDate",
+      "regularHours": "regularHours",
+      "overtimeHours": "overtimeHours",
+      "hourlyWage": "hourlyWage",
+      "breaks": "breaks",
+      "declaredCashTips": "declaredCashTips",
+      "nonCashTips": "nonCashTips",
+      "nonCashTipsRoundingLoss": "nonCashTipsRoundingLoss",
+      "cashGratuityServiceCharges": "cashGratuityServiceCharges",
+      "nonCashGratuityServiceCharges": "nonCashGratuityServiceCharges",
+      "tipsWithheld": "tipsWithheld",
+      "nonCashSales": "nonCashSales",
+      "cashSales": "cashSales"
+    },
+    "force_types": [],
+    "child_tables": {
+      "breaks": {
+        "table_name": "breaks",
+        "column_mappings": {
+          "guid": "guid",
+          "time_entries_guid": "time_entries_guid",
+          "breakType.guid": "breakType_guid",
+          "breakType.entityType": "breakType_entityType",
+          "paid": "paid",
+          "inDate": "inDate",
+          "outDate": "outDate",
+          "missed": "missed",
+          "waived": "waived",
+          "auditResponse": "auditResponse"
+        },
+        "primary_keys": [
+          "guid"
+        ],
+        "force_types": [],
+        "child_tables": {}
+      }
+    }
+  },
+  "payments": {
+    "table_name": "payments",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "paidDate": "paidDate",
+      "paidBusinessDate": "paidBusinessDate",
+      "type": "type",
+      "cardEntryMode": "cardEntryMode",
+      "amount": "amount",
+      "tipAmount": "tipAmount",
+      "amountTendered": "amountTendered",
+      "cardType": "cardType",
+      "first6Digits": "first6Digits",
+      "last4Digits": "last4Digits",
+      "originalProcessingFee": "originalProcessingFee",
+      "server.guid": "server_guid",
+      "server.entityType": "server_entityType",
+      "server.externalId": "server_externalId",
+      "cashDrawer.guid": "cashDrawer_guid",
+      "cashDrawer.entityType": "cashDrawer_entityType",
+      "cashDrawer.externalId": "cashDrawer_externalId",
+      "refundStatus": "refundStatus",
+      "refund.refundAmount": "refund_refundAmount",
+      "refund.tipRefundAmount": "refund_tipRefundAmount",
+      "refund.refundDate": "refund_refundDate",
+      "refund.refundBusinessDate": "refund_refundBusinessDate",
+      "refund.refundTransaction.guid": "refund_refundTransaction_guid",
+      "refund.refundTransaction.entityType": "refund_refundTransaction_entityType",
+      "paymentStatus": "paymentStatus",
+      "voidInfo.voidUser.guid": "voidInfo_voidUser_guid",
+      "voidInfo.voidUser.entityType": "voidInfo_voidUser_entityType",
+      "voidInfo.voidUser.externalId": "voidInfo_voidUser_externalId",
+      "voidInfo.voidApprover.guid": "voidInfo_voidApprover_guid",
+      "voidInfo.voidApprover.entityType": "voidInfo_voidApprover_entityType",
+      "voidInfo.voidApprover.externalId": "voidInfo_voidApprover_externalId",
+      "voidInfo.voidDate": "voidInfo_voidDate",
+      "voidInfo.voidBusinessDate": "voidInfo_voidBusinessDate",
+      "voidInfo.voidReason.guid": "voidInfo_voidReason_guid",
+      "voidInfo.voidReason.entityType": "voidInfo_voidReason_entityType",
+      "voidInfo.voidReason.externalId": "voidInfo_voidReason_externalId",
+      "houseAccount.guid": "houseAccount_guid",
+      "houseAccount.entityType": "houseAccount_entityType",
+      "houseAccount.externalId": "houseAccount_externalId",
+      "otherPayment.guid": "otherPayment_guid",
+      "otherPayment.entityType": "otherPayment_entityType",
+      "otherPayment.externalId": "otherPayment_externalId",
+      "createdDevice.id": "createdDevice_id",
+      "lastModifiedDevice.id": "lastModifiedDevice_id",
+      "mcaRepaymentAmount": "mcaRepaymentAmount",
+      "cardPaymentId": "cardPaymentId",
+      "orderGuid": "orderGuid",
+      "checkGuid": "checkGuid",
+      "tenderTransactionGuid": "tenderTransactionGuid",
+      "networkTransactionIdentifier": "networkTransactionIdentifier"
+    },
+    "force_types": [],
+    "child_tables": {}
+  },
+  "employees": {
+    "table_name": "employees",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "externalId": "externalId",
+      "createdDate": "createdDate",
+      "modifiedDate": "modifiedDate",
+      "deletedDate": "deletedDate",
+      "firstName": "firstName",
+      "chosenName": "chosenName",
+      "lastName": "lastName",
+      "email": "email",
+      "phoneNumber": "phoneNumber",
+      "phoneNumberCountryCode": "phoneNumberCountryCode",
+      "passcode": "passcode",
+      "externalEmployeeId": "externalEmployeeId",
+      "deleted": "deleted",
+      "jobReferences": "jobReferences",
+      "wageOverrides": "wageOverrides",
+      "v2EmployeeGuid": "v2EmployeeGuid"
+    },
+    "force_types": [],
+    "child_tables": {
+      "jobReferences": {
+        "table_name": "jobReferences",
+        "column_mappings": {
+          "guid": "guid",
+          "employees_guid": "employees_guid",
+          "entityType": "entityType",
+          "externalId": "externalId"
+        },
+        "primary_keys": [
+          "guid"
+        ],
+        "force_types": [],
+        "child_tables": {}
+      },
+      "wageOverrides": {
+        "table_name": "wageOverrides",
+        "column_mappings": {
+          "employees_guid": "employees_guid",
+          "wage": "wage",
+          "jobReference.guid": "jobReference_guid",
+          "jobReference.entityType": "jobReference_entityType",
+          "jobReference.externalId": "jobReference_externalId"
+        },
+        "primary_keys": [
+          "employees_guid",
+          "jobReference_guid"
+        ],
+        "force_types": [],
+        "child_tables": {}
+      }
+    }
+  },
   "menus": {
     "table_name": "menus",
     "primary_keys": [

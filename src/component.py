@@ -15,10 +15,17 @@ from configuration import Configuration
 from client import ToastClient
 
 import json
+import warnings
 from pathlib import Path
 from typing import Dict, IO
 from dataclasses import dataclass
 import datetime
+
+warnings.filterwarnings(
+    "ignore",
+    message="Parsing dates involving a day of month without a year",
+    category=DeprecationWarning,
+)
 
 
 @dataclass
@@ -86,6 +93,22 @@ class Component(ComponentBase):
                 self.download_dining_options(guid)
             if 'menus' in self.cfg.endpoints:
                 self.download_menus(guid)
+            if 'employees' in self.cfg.endpoints:
+                self.download_employees(guid)
+            if 'payments' in self.cfg.endpoints:
+                self.download_payments(guid)
+            if 'time_entries' in self.cfg.endpoints:
+                self.download_time_entries(guid)
+            if 'jobs' in self.cfg.endpoints:
+                self.download_jobs(guid)
+            if 'break_types' in self.cfg.endpoints:
+                self.download_break_types(guid)
+            if 'sales_categories' in self.cfg.endpoints:
+                self.download_sales_categories(guid)
+            if 'void_reasons' in self.cfg.endpoints:
+                self.download_void_reasons(guid)
+            if 'menu_items' in self.cfg.endpoints:
+                self.download_menu_items(guid)
 
         for table, cache_record in self._writer_cache.items():
             cache_record.file.close()
@@ -112,6 +135,138 @@ class Component(ComponentBase):
 
         parser = Parser("menus", mapping, False)
         out = parser.parse_data(menus)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping)
+
+    def download_employees(self, restaurant_id: str):
+        employees = self.client.employees(restaurant_id)
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['employees'])
+
+        parser = Parser("employees", mapping, False)
+        out = parser.parse_data(employees)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping)
+
+    def download_time_entries(self, restaurant_id: str):
+        end_date, start_date = self.get_dates()
+
+        time_entries = self.client.time_entries(restaurant_id, start_date, end_date)
+        logging.info(f'Fetched {len(time_entries)} time entries')
+
+        if not time_entries:
+            return
+
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['time_entries'])
+        parser = Parser("time_entries", mapping, False)
+        out = parser.parse_data(time_entries)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping, restaurant_id)
+
+    def download_payments(self, restaurant_id: str):
+        end_date, start_date = self.get_dates()
+
+        current_date = start_date
+        all_payments = []
+        while current_date <= end_date:
+            business_date = current_date.strftime('%Y%m%d')
+            logging.info(f'Fetching payment IDs for business date {business_date}')
+
+            payment_ids = self.client.list_payment_ids(restaurant_id, business_date)
+            logging.info(f'Found {len(payment_ids)} payments for {business_date}')
+
+            for payment_guid in payment_ids:
+                payment = self.client.get_payment(restaurant_id, payment_guid)
+                all_payments.append(payment)
+
+            current_date += datetime.timedelta(days=1)
+
+        if not all_payments:
+            return
+
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['payments'])
+        parser = Parser("payments", mapping, False)
+        out = parser.parse_data(all_payments)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping, restaurant_id)
+
+    def download_jobs(self, restaurant_id: str):
+        jobs = self.client.jobs(restaurant_id)
+        logging.info(f'Fetched {len(jobs)} jobs')
+
+        if not jobs:
+            return
+
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['jobs'])
+        parser = Parser("jobs", mapping, False)
+        out = parser.parse_data(jobs)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping)
+
+    def download_break_types(self, restaurant_id: str):
+        break_types = self.client.break_types(restaurant_id)
+        logging.info(f'Fetched {len(break_types)} break types')
+
+        if not break_types:
+            return
+
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['break_types'])
+        parser = Parser("break_types", mapping, False)
+        out = parser.parse_data(break_types)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping)
+
+    def download_sales_categories(self, restaurant_id: str):
+        sales_categories = self.client.sales_categories(restaurant_id)
+        logging.info(f'Fetched {len(sales_categories)} sales categories')
+
+        if not sales_categories:
+            return
+
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['sales_categories'])
+        parser = Parser("sales_categories", mapping, False)
+        out = parser.parse_data(sales_categories)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping)
+
+    def download_void_reasons(self, restaurant_id: str):
+        void_reasons = self.client.void_reasons(restaurant_id)
+        logging.info(f'Fetched {len(void_reasons)} void reasons')
+
+        if not void_reasons:
+            return
+
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['void_reasons'])
+        parser = Parser("void_reasons", mapping, False)
+        out = parser.parse_data(void_reasons)
+
+        for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
+            if table_name in out:
+                self.write_to_csv(out, table_name, table_mapping)
+
+    def download_menu_items(self, restaurant_id: str):
+        menu_items = self.client.menu_items(restaurant_id)
+        logging.info(f'Fetched {len(menu_items)} menu items')
+
+        if not menu_items:
+            return
+
+        mapping = TableMapping.build_from_mapping_dict(self.parser_mapping['menu_items'])
+        parser = Parser("menu_items", mapping, False)
+        out = parser.parse_data(menu_items)
 
         for table_name, table_mapping in table_mappings_flattened_by_key(mapping).items():
             if table_name in out:

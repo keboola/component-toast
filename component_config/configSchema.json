@@ -90,14 +90,30 @@
             "Restaurant Configuration Information",
             "Orders",
             "Dining Options",
-            "Menus"
+            "Menus",
+            "Employees",
+            "Payments",
+            "Time Entries",
+            "Jobs",
+            "Break Types",
+            "Sales Categories",
+            "Void Reasons",
+            "Menu Items"
           ]
         },
         "enum": [
           "configuration_information",
           "orders",
           "dining_options",
-          "menus"
+          "menus",
+          "employees",
+          "payments",
+          "time_entries",
+          "jobs",
+          "break_types",
+          "sales_categories",
+          "void_reasons",
+          "menu_items"
         ],
         "type": "string"
       },
