@@ -543,6 +543,19 @@
     "force_types": [],
     "child_tables": {}
   },
+  "void_reasons": {
+    "table_name": "void_reasons",
+    "primary_keys": [
+      "guid"
+    ],
+    "column_mappings": {
+      "guid": "guid",
+      "entityType": "entityType",
+      "name": "name"
+    },
+    "force_types": [],
+    "child_tables": {}
+  },
   "time_entries": {
     "table_name": "time_entries",
     "primary_keys": [

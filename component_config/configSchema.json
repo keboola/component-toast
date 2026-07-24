@@ -96,7 +96,8 @@
             "Time Entries",
             "Jobs",
             "Break Types",
-            "Sales Categories"
+            "Sales Categories",
+            "Void Reasons"
           ]
         },
         "enum": [
@@ -109,7 +110,8 @@
           "time_entries",
           "jobs",
           "break_types",
-          "sales_categories"
+          "sales_categories",
+          "void_reasons"
         ],
         "type": "string"
       },
