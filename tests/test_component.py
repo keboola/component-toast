@@ -50,19 +50,21 @@ class TestTransientErrorRetry(unittest.TestCase):
         batches = list(self._client().list_orders('r1', datetime.datetime(2020, 1, 1), datetime.datetime(2020, 1, 2)))
 
         self.assertEqual(batches, [[{'guid': 'o1'}]])
-        self.assertEqual(request.call_count, 3)
-        # the retried call repeats the same page
-        self.assertEqual(request.call_args_list[0], request.call_args_list[1])
-        sleep.assert_called_once()
+        # the retried call re-fetches the same page, then pagination continues
+        pages = []
+        for call in request.call_args_list:
+            pages.append(call.kwargs['params']['page'])
+        self.assertEqual(pages, [1, 1, 2])
+        sleep.assert_called_once_with(2)
 
     def test_persistent_connection_reset_reraises_after_retries(self, request, _token, sleep):
-        request.side_effect = ConnectionResetError(104, 'Connection reset by peer')
+        request.side_effect = ChunkedEncodingError("Connection broken")
 
-        with self.assertRaises(ConnectionResetError):
+        with self.assertRaises(ChunkedEncodingError):
             self._client().menus('r1')
 
         self.assertEqual(request.call_count, 4)
-        self.assertEqual(sleep.call_count, 3)
+        sleep.assert_has_calls([mock.call(2), mock.call(4), mock.call(8)])
 
     def test_http_error_is_not_retried(self, request, _token, sleep):
         rsp = _response({})

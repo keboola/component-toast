@@ -14,7 +14,7 @@ ORDERS_BATCH_SIZE = 1000
 
 # Connection resets while the response body is being read are raised by requests after urllib3's
 # built-in Retry has already returned, so HttpClient's max_retries never covers them.
-TRANSIENT_ERRORS = (ChunkedEncodingError, ConnectionResetError)
+TRANSIENT_ERRORS = (ChunkedEncodingError,)
 TRANSIENT_MAX_RETRIES = 3
 TRANSIENT_INITIAL_BACKOFF = 2
 
