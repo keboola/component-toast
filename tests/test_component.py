@@ -3,14 +3,16 @@ Created on 12. 11. 2018
 
 @author: esner
 '''
+import datetime
 import unittest
 import mock
 import os
-import datetime
 from freezegun import freeze_time
+from requests.exceptions import ChunkedEncodingError, HTTPError
 
 from component import Component
 from client import ToastClient
+from keboola.component import UserException
 
 
 class TestComponent(unittest.TestCase):
@@ -25,50 +27,53 @@ class TestComponent(unittest.TestCase):
             comp.run()
 
 
+def _response(payload):
+    rsp = mock.MagicMock()
+    rsp.json.return_value = payload
+    return rsp
+
+
+@mock.patch('client.time.sleep')
+@mock.patch.object(ToastClient, 'get_token', return_value='token')
+@mock.patch.object(ToastClient, 'request')
 class TestTransientErrorRetry(unittest.TestCase):
-    """Test that transient network errors (ConnectionResetError) are retried."""
 
-    @mock.patch.object(ToastClient, 'request')
-    @mock.patch.object(ToastClient, 'update_auth_header')
-    @mock.patch.object(ToastClient, 'get_token', return_value='fake_token')
-    def test_list_restaurants_retries_on_connection_reset(self, mock_get_token, mock_update_auth, mock_request):
-        """Verify list_restaurants retries on ConnectionResetError and succeeds on retry."""
-        # First call raises ConnectionResetError, second call succeeds
-        success_response = mock.MagicMock()
-        success_response.status_code = 200
-        success_response.json.return_value = [{'restaurantGuid': 'guid1'}]
-        success_response.raise_for_status = mock.MagicMock()
+    def _client(self):
+        return ToastClient('id', 'secret', 'https://example.com/')
 
-        mock_request.side_effect = [
-            ConnectionResetError(104, 'Connection reset by peer'),
-            success_response
+    def test_connection_reset_during_orders_page_is_retried(self, request, _token, sleep):
+        request.side_effect = [
+            ChunkedEncodingError("Connection broken: ConnectionResetError(104, 'Connection reset by peer')"),
+            _response([{'guid': 'o1'}]),
+            _response([]),
         ]
+        batches = list(self._client().list_orders('r1', datetime.datetime(2020, 1, 1), datetime.datetime(2020, 1, 2)))
 
-        client = ToastClient('client_id', 'client_secret', 'http://api.example.com')
+        self.assertEqual(batches, [[{'guid': 'o1'}]])
+        self.assertEqual(request.call_count, 3)
+        # the retried call repeats the same page
+        self.assertEqual(request.call_args_list[0], request.call_args_list[1])
+        sleep.assert_called_once()
 
-        # This should NOT raise; the retry should succeed on the second attempt
-        result = client.list_restaurants()
+    def test_persistent_connection_reset_reraises_after_retries(self, request, _token, sleep):
+        request.side_effect = ConnectionResetError(104, 'Connection reset by peer')
 
-        # Verify we got the mocked response and request was called twice (first failed, second succeeded)
-        self.assertEqual(mock_request.call_count, 2)
-        self.assertEqual(result, [{'restaurantGuid': 'guid1'}])
-
-    @mock.patch.object(ToastClient, 'request')
-    @mock.patch.object(ToastClient, 'update_auth_header')
-    @mock.patch.object(ToastClient, 'get_token', return_value='fake_token')
-    def test_list_orders_retries_then_fails_after_max_retries(self, mock_get_token, mock_update_auth, mock_request):
-        """Verify list_orders retries up to max_retries and then re-raises."""
-        # All calls raise ConnectionResetError
-        mock_request.side_effect = ConnectionResetError(104, 'Connection reset by peer')
-
-        client = ToastClient('client_id', 'client_secret', 'http://api.example.com')
-
-        # This should raise after exhausting retries
         with self.assertRaises(ConnectionResetError):
-            list(client.list_orders('restaurant_id', datetime.datetime(2010, 1, 1), datetime.datetime(2010, 1, 2)))
+            self._client().menus('r1')
 
-        # Verify request was called max_retries + 1 times (3 + 1 = 4)
-        self.assertEqual(mock_request.call_count, 4)
+        self.assertEqual(request.call_count, 4)
+        self.assertEqual(sleep.call_count, 3)
+
+    def test_http_error_is_not_retried(self, request, _token, sleep):
+        rsp = _response({})
+        rsp.raise_for_status.side_effect = HTTPError(response=mock.MagicMock(text='bad'))
+        request.return_value = rsp
+
+        with self.assertRaises(UserException):
+            self._client().dining_options('r1')
+
+        self.assertEqual(request.call_count, 1)
+        sleep.assert_not_called()
 
 
 if __name__ == "__main__":
