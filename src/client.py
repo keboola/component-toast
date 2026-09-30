@@ -1,8 +1,9 @@
 import logging
 import datetime
+import time
 from collections.abc import Iterator
 from typing import Dict
-from requests.exceptions import HTTPError
+from requests.exceptions import HTTPError, ChunkedEncodingError
 from ratelimit import limits, sleep_and_retry
 
 from keboola.component import UserException
@@ -10,6 +11,12 @@ from keboola.http_client import HttpClient
 
 ORDERS_PAGE_SIZE = 100
 ORDERS_BATCH_SIZE = 1000
+
+# Connection resets while the response body is being read are raised by requests after urllib3's
+# built-in Retry has already returned, so HttpClient's max_retries never covers them.
+TRANSIENT_ERRORS = (ChunkedEncodingError,)
+TRANSIENT_MAX_RETRIES = 3
+TRANSIENT_INITIAL_BACKOFF = 2
 
 
 def _parse_http_error(e) -> str:
@@ -42,6 +49,22 @@ class ToastClient(HttpClient):
         logging.debug(f"Requesting {method}, {endpoint_path}")
         return self._request_raw(method, endpoint_path, **kwargs)
 
+    def _get_with_retry(self, endpoint_path, **kwargs):
+        """
+        GET request retried on transient transport errors with exponential backoff.
+        Re-raises the last error once the retries are exhausted.
+        """
+        for attempt in range(TRANSIENT_MAX_RETRIES + 1):
+            try:
+                return self.request("GET", endpoint_path, **kwargs)
+            except TRANSIENT_ERRORS as e:
+                if attempt == TRANSIENT_MAX_RETRIES:
+                    raise
+                delay = TRANSIENT_INITIAL_BACKOFF * 2 ** attempt
+                logging.warning(f"Transient network error on GET {endpoint_path}: {e}. "
+                                f"Retrying in {delay}s (attempt {attempt + 1}/{TRANSIENT_MAX_RETRIES}).")
+                time.sleep(delay)
+
     def get_token(self, client_id, client_secret):
         headers = {"Content-Type": "application/json"}
         payload = {"clientId": client_id, "clientSecret": client_secret, "userAccessType": "TOAST_MACHINE_CLIENT"}
@@ -62,7 +85,7 @@ class ToastClient(HttpClient):
         """
 
         try:
-            response = self.request("GET", "partners/v1/restaurants")
+            response = self._get_with_retry("partners/v1/restaurants")
             response.raise_for_status()
 
         except HTTPError as e:
@@ -77,7 +100,7 @@ class ToastClient(HttpClient):
         self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
 
         try:
-            response = self.request("GET", endpoint_path=f"/restaurants/v1/groups/{restaurant_group_id}/restaurants")
+            response = self._get_with_retry(endpoint_path=f"/restaurants/v1/groups/{restaurant_group_id}/restaurants")
             response.raise_for_status()
 
         except HTTPError as e:
@@ -89,7 +112,7 @@ class ToastClient(HttpClient):
         self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
 
         try:
-            response = self.request("GET", endpoint_path=f"restaurants/v1/restaurants/{restaurant_id}")
+            response = self._get_with_retry(endpoint_path=f"restaurants/v1/restaurants/{restaurant_id}")
             response.raise_for_status()
 
         except HTTPError as e:
@@ -114,7 +137,7 @@ class ToastClient(HttpClient):
 
             try:
 
-                response = self.request("GET", endpoint_path='orders/v2/ordersBulk', params=query)
+                response = self._get_with_retry(endpoint_path='orders/v2/ordersBulk', params=query)
                 response.raise_for_status()
 
             except HTTPError as e:
@@ -141,7 +164,7 @@ class ToastClient(HttpClient):
         self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
 
         try:
-            response = self.request("GET", "config/v2/diningOptions")
+            response = self._get_with_retry("config/v2/diningOptions")
             response.raise_for_status()
 
         except HTTPError as e:
@@ -156,7 +179,7 @@ class ToastClient(HttpClient):
         self.update_auth_header({"Toast-Restaurant-External-ID": restaurant_id})
 
         try:
-            response = self.request("GET", "menus/v2/menus")
+            response = self._get_with_retry("menus/v2/menus")
             response.raise_for_status()
 
         except HTTPError as e:

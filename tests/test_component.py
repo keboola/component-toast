@@ -3,12 +3,16 @@ Created on 12. 11. 2018
 
 @author: esner
 '''
+import datetime
 import unittest
 import mock
 import os
 from freezegun import freeze_time
+from requests.exceptions import ChunkedEncodingError, HTTPError
 
 from component import Component
+from client import ToastClient
+from keboola.component import UserException
 
 
 class TestComponent(unittest.TestCase):
@@ -21,6 +25,57 @@ class TestComponent(unittest.TestCase):
         with self.assertRaises(ValueError):
             comp = Component()
             comp.run()
+
+
+def _response(payload):
+    rsp = mock.MagicMock()
+    rsp.json.return_value = payload
+    return rsp
+
+
+@mock.patch('client.time.sleep')
+@mock.patch.object(ToastClient, 'get_token', return_value='token')
+@mock.patch.object(ToastClient, 'request')
+class TestTransientErrorRetry(unittest.TestCase):
+
+    def _client(self):
+        return ToastClient('id', 'secret', 'https://example.com/')
+
+    def test_connection_reset_during_orders_page_is_retried(self, request, _token, sleep):
+        request.side_effect = [
+            ChunkedEncodingError("Connection broken: ConnectionResetError(104, 'Connection reset by peer')"),
+            _response([{'guid': 'o1'}]),
+            _response([]),
+        ]
+        batches = list(self._client().list_orders('r1', datetime.datetime(2020, 1, 1), datetime.datetime(2020, 1, 2)))
+
+        self.assertEqual(batches, [[{'guid': 'o1'}]])
+        # the retried call re-fetches the same page, then pagination continues
+        pages = []
+        for call in request.call_args_list:
+            pages.append(call.kwargs['params']['page'])
+        self.assertEqual(pages, [1, 1, 2])
+        sleep.assert_called_once_with(2)
+
+    def test_persistent_connection_reset_reraises_after_retries(self, request, _token, sleep):
+        request.side_effect = ChunkedEncodingError("Connection broken")
+
+        with self.assertRaises(ChunkedEncodingError):
+            self._client().menus('r1')
+
+        self.assertEqual(request.call_count, 4)
+        sleep.assert_has_calls([mock.call(2), mock.call(4), mock.call(8)])
+
+    def test_http_error_is_not_retried(self, request, _token, sleep):
+        rsp = _response({})
+        rsp.raise_for_status.side_effect = HTTPError(response=mock.MagicMock(text='bad'))
+        request.return_value = rsp
+
+        with self.assertRaises(UserException):
+            self._client().dining_options('r1')
+
+        self.assertEqual(request.call_count, 1)
+        sleep.assert_not_called()
 
 
 if __name__ == "__main__":
